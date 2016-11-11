@@ -7,3 +7,4 @@ java-wrapper/.idea
 
 # also ignore SWIG-generated classes
 java-wrapper/src/main/java/is/ulrik/spirvcrossj/*.java
+java-wrapper/src/main/java/is/ulrik/spirvcrossj/*.cxx

@@ -4,6 +4,12 @@
 
 ## Building
 
+To build the wrapper, you need the following prerequisites:
+* CMake, version 2.8 or higher.
+* SWIG, version 3.0 or higher.
+* a working build environment, meaning Visual Studio on Windows, autotools and gcc/clang on OSX/Linux.
+* Maven for building the JAR
+
 ### OSX/Linux
 On OSX and Linux, you can simply run `build.sh` or follow these steps:
 ```

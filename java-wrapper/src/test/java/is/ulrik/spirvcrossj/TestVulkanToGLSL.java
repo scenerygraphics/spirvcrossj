@@ -3,6 +3,7 @@ package is.ulrik.spirvcrossj;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Files;
@@ -16,10 +17,10 @@ import java.nio.file.Paths;
 public class TestVulkanToGLSL {
 
   @Test
-  public void convertVulkanToGLSL310() throws IOException {
+  public void convertVulkanToGLSL310() throws IOException, URISyntaxException {
     System.loadLibrary("spirvcrossj");
 
-    ByteBuffer data = ByteBuffer.wrap(Files.readAllBytes(Paths.get("/Users/ulrik/Code/ClearVolume/scenery/src/main/resources/scenery/backends/vulkan/shaders/DefaultDeferred.frag.spv")));
+    ByteBuffer data = ByteBuffer.wrap(Files.readAllBytes(Paths.get(TestVulkanToGLSL.class.getResource("fullscreen-quad.spv").toURI())));
     IntVec spirv = new IntVec();
     IntBuffer ib = data.asIntBuffer();
 
@@ -27,7 +28,7 @@ public class TestVulkanToGLSL {
       spirv.push_back(ib.get());
     }
 
-    System.err.println("Read " + ib.position() + " longs");
+    System.out.println("Read " + ib.position() + " longs from SPIR-V binary.\n");
 
     CompilerGLSL compiler = new CompilerGLSL(spirv);
 
@@ -43,6 +44,6 @@ public class TestVulkanToGLSL {
     compiler.set_options(options);
 
     // output GLSL 3.10 code
-    System.err.println(compiler.compile());
+    System.out.println("SPIR-V converted to GLSL 3.10:\n\n" + compiler.compile());
   }
 }

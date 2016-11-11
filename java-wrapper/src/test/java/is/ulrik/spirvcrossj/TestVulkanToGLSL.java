@@ -13,18 +13,18 @@ import java.nio.file.Paths;
  *
  * @author Ulrik Günther <hello@ulrik.is>
  */
-public class TestGLSLtoVulkan {
+public class TestVulkanToGLSL {
 
   @Test
-  public void convertVulkanToGLSL410() throws IOException {
-    System.loadLibrary("spirvcrossj_jni");
+  public void convertVulkanToGLSL310() throws IOException {
+    System.loadLibrary("spirvcrossj");
 
     ByteBuffer data = ByteBuffer.wrap(Files.readAllBytes(Paths.get("/Users/ulrik/Code/ClearVolume/scenery/src/main/resources/scenery/backends/vulkan/shaders/DefaultDeferred.frag.spv")));
     IntVec spirv = new IntVec();
     IntBuffer ib = data.asIntBuffer();
 
     while(ib.hasRemaining()) {
-      spirv.add(ib.get());
+      spirv.push_back(ib.get());
     }
 
     System.err.println("Read " + ib.position() + " longs");

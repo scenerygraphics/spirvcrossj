@@ -21,8 +21,6 @@
     #include "spirv_cpp.hpp"
     #include "spirv_msl.hpp"
 
-    #include "include/spirv_cross/image.hpp"
-
     using namespace spirv_cross;
 %}
 

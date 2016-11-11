@@ -33,8 +33,14 @@ using namespace std;
 using namespace spirv_cross;
 
 namespace std {
+    %template(StringVec) std::vector<std::string>;
     %template(IntVec) std::vector<uint32_t>;
     %template(ResourceVec) std::vector<spirv_cross::Resource>;
+    %template(BufferRangeVec) std::vector<spirv_cross::BufferRange>;
+    %template(CombinedImageSamplerVec) std::vector<spirv_cross::CombinedImageSampler>;
+    %template(MSLResourceBindingVec) std::vector<spirv_cross::MSLResourceBinding>;
+    %template(SpecializationConstantVec) std::vector<spirv_cross::SpecializationConstant>;
+    %template(PlsRemapVec) std::vector<spirv_cross::PlsRemap>;
 }
 
 

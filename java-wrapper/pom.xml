@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>is.ulrik</groupId>
+    <artifactId>spirvcrossj</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <inceptionYear>2016</inceptionYear>
+
+    <name>spirvcrossj</name>
+    <description>Java bindings for Khronos' SPIRV-Cross</description>
+
+    <properties>
+        <scijava.jvm.version>1.8</scijava.jvm.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+    </dependencies>
+
+    <developers>
+        <developer>
+            <id>skalarproduktraum</id>
+            <name>Ulrik Günther</name>
+            <email>hello@ulrik.is</email>
+            <url>http://ulrik.is/</url>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+
+    <licenses> 
+        <license>
+            <name>BSD 2-Clause License</name>
+            <url>http://opensource.org/licenses/BSD-2-Clause</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+ </project>
+

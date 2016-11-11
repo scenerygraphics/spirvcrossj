@@ -2,4 +2,8 @@ build/
 java-wrapper/target
 java-wrapper/*.iml
 java-wrapper/*.ipr
+java-wrapper/.idea
 .*.swp
+
+# also ignore SWIG-generated classes
+java-wrapper/src/main/java/is/ulrik/spirvcrossj/*.java

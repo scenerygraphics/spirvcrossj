@@ -7,6 +7,9 @@ INCLUDE(${SWIG_USE_FILE})
 
 FIND_PACKAGE(JNI)
 
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/java-wrapper/src/natives")
+
+
 if(${CMAKE_GENERATOR} MATCHES "Makefile")
   if(${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_BINARY_DIR})
     message(FATAL_ERROR "Build out of tree to avoid overwriting Makefile")
@@ -44,3 +47,9 @@ if (NOT "${MSVC}")
   set_source_files_properties( ${swig_generated_file_fullname}
                              PROPERTIES COMPILE_FLAGS ${spirv-compiler-options})
 endif(NOT "${MSVC}")
+
+if ("${MSVC}")
+	set_target_properties( spirvcrossj PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} )
+	set_target_properties( spirvcrossj PROPERTIES LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+	set_target_properties( spirvcrossj PROPERTIES LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+endif ( "${MSVC}" )

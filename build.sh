@@ -4,4 +4,4 @@ cd build
 cmake ..
 make
 cd ../java-wrapper
-mvn install
+mvn package

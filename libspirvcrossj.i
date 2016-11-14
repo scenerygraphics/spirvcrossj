@@ -9,9 +9,10 @@
 %rename(set) operator=;
 %rename(invoke) operator();
 %rename(less_than) operator<;
-%rename("%(undercase)s", %$isfunction, %$not %$ismemberget, %$not %$ismemberset) "";
+%rename("%(lowercamelcase)s", %$isfunction, %$not %$ismemberget, %$not %$ismemberset) "";
+%rename("%(lowercamelcase)s", %$isvariable) "";
 
-%naturalvar ShaderResources::uniform_buffers;
+%naturalvar SPIRConstant;
 
 %{
     #include "spirv.hpp"

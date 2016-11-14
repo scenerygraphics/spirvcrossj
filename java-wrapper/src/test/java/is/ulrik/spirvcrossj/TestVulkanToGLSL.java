@@ -25,23 +25,23 @@ public class TestVulkanToGLSL {
     IntBuffer ib = data.asIntBuffer();
 
     while(ib.hasRemaining()) {
-      spirv.push_back(ib.get());
+      spirv.pushBack(ib.get());
     }
 
     System.out.println("Read " + ib.position() + " longs from SPIR-V binary.\n");
 
     CompilerGLSL compiler = new CompilerGLSL(spirv);
 
-    ShaderResources res = compiler.get_shader_resources();
-    for(int i = 0; i < res.getUniform_buffers().capacity(); i++) {
-      System.err.println(res.getUniform_buffers().get(i).getName());
+    ShaderResources res = compiler.getShaderResources();
+    for(int i = 0; i < res.getUniformBuffers().capacity(); i++) {
+      System.err.println(res.getUniformBuffers().get(i).getName());
     }
 
     CompilerGLSL.Options options = new CompilerGLSL.Options();
     options.setVersion(310);
     options.setEs(false);
 
-    compiler.set_options(options);
+    compiler.setOptions(options);
 
     // output GLSL 3.10 code
     System.out.println("SPIR-V converted to GLSL 3.10:\n\n" + compiler.compile());

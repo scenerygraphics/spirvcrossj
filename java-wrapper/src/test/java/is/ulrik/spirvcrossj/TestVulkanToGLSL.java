@@ -18,7 +18,7 @@ public class TestVulkanToGLSL {
 
   @Test
   public void convertVulkanToGLSL310() throws IOException, URISyntaxException {
-    System.loadLibrary("spirvcrossj");
+    Loader.loadNatives();
 
     ByteBuffer data = ByteBuffer.wrap(Files.readAllBytes(Paths.get(TestVulkanToGLSL.class.getResource("fullscreen-quad.spv").toURI())));
     IntVec spirv = new IntVec();

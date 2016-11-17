@@ -4,15 +4,18 @@
 %include "std_vector.i"
 %include "stdint.i"
 %include "std_string.i"
+%include "enums.swg"
 
 %rename(equals) operator==;
 %rename(set) operator=;
 %rename(invoke) operator();
 %rename(less_than) operator<;
+%rename(or) operator |;
 %rename("%(lowercamelcase)s", %$isfunction, %$not %$ismemberget, %$not %$ismemberset) "";
 %rename("%(lowercamelcase)s", %$isvariable) "";
 
 %naturalvar SPIRConstant;
+%naturalvar SPIRType;
 
 %{
     #include "spirv.hpp"
@@ -25,6 +28,7 @@
     using namespace spirv_cross;
 %}
 
+%include "SPIRV-cross/spirv.hpp"
 %include "SPIRV-cross/spirv_cross.hpp"
 %include "SPIRV-cross/spirv_glsl.hpp"
 %include "SPIRV-cross/spirv_cpp.hpp"

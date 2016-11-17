@@ -15,21 +15,38 @@ import java.util.stream.Collectors;
  */
 public class Loader {
 
+    static boolean nativesReady = false;
+
     public static void loadNatives() throws IOException {
+        if(nativesReady) {
+            return;
+        }
+
         String lp = System.getProperty("java.library.path");
-        File tmpDir = Files.createTempDirectory("scenery-natives-tmp").toFile();
+        File tmpDir = Files.createTempDirectory("spirvcrossj-natives-tmp").toFile();
 
-        List<String> jars = Arrays.stream(System.getProperty("java.class.path").split(File.pathSeparator))
-                .filter(s -> s.contains("natives") && s.contains("spirvcrossj"))
-                .collect(Collectors.toList());
+        String[] jars = System.getProperty("java.class.path").split(File.pathSeparator);
 
-        jars.stream().forEach(s -> {
+        for(int i = 0; i < jars.length; i ++) {
+            String s = jars[i];
+
+            if(!(s.contains("spirvcrossj") && s.contains("natives"))) {
+                continue;
+            }
+
             try {
                 JarFile jar = new JarFile(s);
                 Enumeration<JarEntry> enumEntries = jar.entries();
 
                 while (enumEntries.hasMoreElements()) {
                     JarEntry entry = enumEntries.nextElement();
+
+                    // only extract library files
+                    String extension = entry.getName().substring(entry.getName().lastIndexOf('.') + 1);
+                    if (!(extension.startsWith("so") || extension.startsWith("dll") || extension.startsWith("dylib"))) {
+                        continue;
+                    }
+
                     File f = new File(tmpDir.getAbsolutePath() + File.separator + entry.getName());
 
                     if (entry.isDirectory()) {
@@ -48,16 +65,14 @@ public class Loader {
                     ins.close();
                 }
 
-                System.setProperty("java.library.path", lp + File.pathSeparator + tmpDir.getAbsolutePath());
-
-                Field fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");
-                fieldSysPath.setAccessible(true);
-                fieldSysPath.set(null, null);
-            } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
-                System.err.println("Failed to set java.library.path: " + e.getMessage());
+                System.setProperty("java.library.path", lp + File.pathSeparator + tmpDir.getCanonicalPath());
+            } catch (IOException e) {
+                System.err.println("Failed to extract native libraries: " + e.getMessage());
+                e.printStackTrace();
             }
-        });
+        }
 
+        lp = System.getProperty("java.library.path");
         System.setProperty("java.library.path", lp + File.pathSeparator + new java.io.File( "." ).getCanonicalPath() + File.separator + "src" + File.separator + "natives");
 
         try {
@@ -66,13 +81,19 @@ public class Loader {
             fieldSysPath.set(null, null);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             System.err.println("Failed to set java.library.path: " + e.getMessage());
+            e.printStackTrace();
         }
 
         try {
             System.loadLibrary("spirvcrossj");
         } catch (UnsatisfiedLinkError e) {
             System.err.println("Unable to load native library: " + e.getMessage());
-            System.err.println("Did you include spirvcrossj-natives-" + System.getProperty("os.name") + " in your dependencies?");
+            String osname = System.getProperty("os.name");
+            String osclass = osname.substring(0, osname.indexOf(' ')).toLowerCase();
+
+            System.err.println("Did you include spirvcrossj-natives-" + osclass + " in your dependencies?");
         }
+
+        nativesReady = true;
     }
 }

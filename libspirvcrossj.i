@@ -10,7 +10,7 @@
 %rename(set) operator=;
 %rename(invoke) operator();
 %rename(less_than) operator<;
-%rename(or) operator |;
+//%rename(or) operator |;
 %rename("%(lowercamelcase)s", %$isfunction, %$not %$ismemberget, %$not %$ismemberset) "";
 %rename("%(lowercamelcase)s", %$isvariable) "";
 
@@ -19,6 +19,7 @@
 
 %{
     #include "spirv.hpp"
+    #include "spirv_cfg.hpp"
     #include "spirv_cross.hpp"
     #include "spirv_common.hpp"
     #include "spirv_glsl.hpp"
@@ -29,12 +30,14 @@
 %}
 
 %include "SPIRV-cross/spirv.hpp"
+%include "SPIRV-cross/spirv_cfg.hpp"
 %include "SPIRV-cross/spirv_cross.hpp"
 %include "SPIRV-cross/spirv_glsl.hpp"
 %include "SPIRV-cross/spirv_cpp.hpp"
 %include "SPIRV-cross/spirv_msl.hpp"
 
 using namespace std;
+using namespace spv;
 using namespace spirv_cross;
 
 namespace std {

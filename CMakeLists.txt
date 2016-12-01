@@ -24,16 +24,11 @@ SET_SOURCE_FILES_PROPERTIES(libspirvcrossj.i PROPERTIES CPLUSPLUS ON)
 
 SWIG_ADD_MODULE(spirvcrossj java libspirvcrossj.i 
     ${SPIRVCROSS_DIR}/GLSL.std.450.h
-	${SPIRVCROSS_DIR}/spirv_common.hpp
-	${SPIRVCROSS_DIR}/spirv.hpp
-	${SPIRVCROSS_DIR}/spirv_cross.hpp
 	${SPIRVCROSS_DIR}/spirv_cross.cpp
 	${SPIRVCROSS_DIR}/spirv_glsl.cpp
-	${SPIRVCROSS_DIR}/spirv_glsl.hpp
-	${SPIRVCROSS_DIR}/spirv_cpp.hpp
 	${SPIRVCROSS_DIR}/spirv_cpp.cpp
-	${SPIRVCROSS_DIR}/spirv_msl.hpp
-	${SPIRVCROSS_DIR}/spirv_msl.cpp)
+	${SPIRVCROSS_DIR}/spirv_msl.cpp
+    ${SPIRVCROSS_DIR}/spirv_cfg.cpp)
 
 target_include_directories(spirvcrossj PUBLIC ${JNI_INCLUDE_DIRS})
 target_include_directories(spirvcrossj PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/SPIRV-cross")

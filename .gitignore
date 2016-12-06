@@ -5,6 +5,10 @@ java-wrapper/*.ipr
 java-wrapper/.idea
 .*.swp
 
-# also ignore SWIG-generated classes
+# also ignore SWIG-generated classes and binaries
 java-wrapper/src/main/java/is/ulrik/spirvcrossj/*.java
 java-wrapper/src/main/java/is/ulrik/spirvcrossj/*.cxx
+java-wrapper/src/natives/*.jnilib
+java-wrapper/src/natives/*.dll
+java-wrapper/src/natives/*.so
+java-wrapper/src/natives/*.dylib

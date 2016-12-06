@@ -1,0 +1,36 @@
+skip_tags: true
+clone_depth: 10
+platform: x64
+configuration: Release
+environment:
+  matrix:
+    - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
+  CI_DEPLOY_USERNAME:
+    secure: dWEJ6lm4P9/5FD+rmAS45A==
+  CI_DEPLOY_PASSWORD:
+    secure: TE0Y8Z/eW3fCFrVrJ0liFKJpYhC+HWR2yDNATU38crF8aFs7Pj2LloZ8c54+DKNu
+install:
+  - ps: |
+      Add-Type -AssemblyName System.IO.Compression.FileSystem
+      if (!(Test-Path -Path "C:\maven" )) {
+        (new-object System.Net.WebClient).DownloadFile('https://repo1.maven.org/maven2/org/apache/maven/apache-maven/3.3.9/apache-maven-3.3.9-bin.zip', 'C:\maven-bin.zip')
+        [System.IO.Compression.ZipFile]::ExtractToDirectory("C:\maven-bin.zip", "C:\maven")
+      }
+  - cmd: SET PATH=C:\maven\apache-maven-3.3.9\bin;%JAVA_HOME%\bin;%PATH%
+  - cmd: SET MAVEN_OPTS=-Xmx2g
+  - cmd: SET JAVA_OPTS=-Xmx2g
+  - cmd: mvn --version
+  - cmd: java -version
+  - cmd: choco install swig
+before_build:
+  - git submodule init
+  - git submodule update
+  - cmake -G "Visual Studio 14 2015 Win64"
+build:
+  project: spirvcrossj.sln
+after_build:
+  - cd java-wrapper
+  - mvn clean package
+  - mvn -U -Pdeploy-to-imagej clean deploy --settings settings.xml
+cache:
+  - C:\maven

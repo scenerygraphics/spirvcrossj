@@ -1,4 +1,4 @@
-package is.ulrik.spirvcrossj;
+package graphics.scenery.spirvcrossj;
 
 import org.junit.Test;
 

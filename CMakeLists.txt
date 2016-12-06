@@ -17,8 +17,8 @@ if(${CMAKE_GENERATOR} MATCHES "Makefile")
 endif()
 
 set(SPIRVCROSS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/SPIRV-cross")
-set(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_SOURCE_DIR}/java-wrapper/src/main/java/is/ulrik/spirvcrossj")
-set(CMAKE_SWIG_FLAGS -package is.ulrik.spirvcrossj)
+set(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_SOURCE_DIR}/java-wrapper/src/main/java/graphics/scenery/spirvcrossj")
+set(CMAKE_SWIG_FLAGS -package graphics.scenery.spirvcrossj)
 
 SET_SOURCE_FILES_PROPERTIES(libspirvcrossj.i PROPERTIES CPLUSPLUS ON)
 

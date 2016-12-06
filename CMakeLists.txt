@@ -37,7 +37,7 @@ target_include_directories(spirvcrossj PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/SPIRV
 # -DCMAKE_CXX_COMPILE_FLAGS
 # However, we require the C++11 dialect.
 if (NOT "${MSVC}")
-  set(spirv-compiler-options -std=c++11 -Wall -Wextra -Wnoerror -Wshadow)
+  set(spirv-compiler-options -std=c++11 -Wall -Wextra -Wunused -Wshadow)
   target_compile_options(spirvcrossj PRIVATE ${spirv-compiler-options})
   set_source_files_properties( ${swig_generated_file_fullname}
                              PROPERTIES COMPILE_FLAGS ${spirv-compiler-options})

@@ -21,6 +21,7 @@ install:
   - cmd: SET JAVA_OPTS=-Xmx2g
   - cmd: mvn --version
   - cmd: java -version
+  - cmd: choco install swig
 before_build:
   - git submodule init
   - git submodule update

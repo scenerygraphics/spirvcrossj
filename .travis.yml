@@ -5,10 +5,6 @@ env:
     - secure: "bXmcp9PKyOQZFmc0vWgaPytk84R4wEEeiBltwiV0P2eh1qZ2PFpmuMqAXrgG+748ctbNImQWo4bxRuc8UWgQhoPZfKtUgmhjGN3xqXfrtLTd8PN/mOG90nlSwapwywBoZD1lk0vq4HDNem+Jc/Fht+iDYOdUlSZLnRz6Z7u6tmJSndmr5EKTGExNLH1dug7JBkLHxKv4SL5FzolgAPhWoMlMir/EwayAD0fTe+g85gKbADVm6sA73VX032rxTORXImbYot5OnwDB1lGGCwn5qqKtoyRihiCUpnkNKv+IwrTDoUYWSSQiAt8Xa8H6sG3/NzO5yxXUD3UJwQUpP5QQAoExUGY8svEF0vP95L/I1vh/KJbaw0rHkd2ecyLI+79bJj91Ebk3i0pLvOrulA+hmDX52lM+VdInCRCLbYQeji7N0HZ6mm2dk7CrBTBHf1Oej4dxDfglElCcoSubIM+CZ5fKEAnb7I4CfslThdtKSn+sVa2XRfNuDQMeupM+eLFZT+nSynrHfgKdH29OFVHbwrMTvds/qhvPsHQ6fM5MaaDiF+XbpU97Tmte1cv9ga204W9eg7lHO2DYYgxnmKV+DLaMWHvvadRPDiaQnWsno2PFhaDt3+xblhdf0QwX8Oxl3uUTxiy1YvXGuVP2sKyT87pJeVewiYEDsnDqns1LX1E="
     - secure: "c5WsbBE7Xp8cnuoC0cHy5NavZ4556z9fjLlADXj6kT7XppQjdZ/+q5CvgETYCltAphlhI8vG0yRyS7QuGF+VUADl5BVE75rMFFmCjY30f5u6nQqhQUcfx/L/bQRZbjmCQdcPooYvk2AmMln4yg5sTxs/ZnbhfPB0v7j2+wgtSYvXErj6yLVrl5I3R1QvGj2Nfs9xSbQ1beJd+BNtaBRAy9OU0Uzq63HtjrAe2muRSwQy+wFAJTGnJqPN+1eqj0w8nyht+osJgx04G0xvhJoff4/kOu2gWEioFT/tfuCIFVhcra9VO4y1qwob3xqdzOozoZO5cmjqUOpCIZWn0XrqFhZc4kv9AXwNH+M/bgEBfFvF1WrzbiFKxAgifRRFkNm/ZCIyGzMhAqDiARBKuleCI42VD+2LJ1nFJ6wZ1GZP3hL0mzfXQM5YFrZgrchuO2b1HM8YyxrGLpDA+zD3cF4iVuOgHWRl73wdroR+yTF9Js7JcEF6gHz5yqr/brbzcTGRzYInQwg4jwhVhWm5EWH7ir3IINBiBQLvfP0uS2GwqHLOadw9jn7kPoBDdncF8Nv/Xln2pCR6GNWN+6lWTj0QsukjQJ792RMA1Zxtw8ES39KBEBLbEQSxJdahgpW98noWpq3JYQxMpnetrA5DjV9yld55iCxa29aIKJv5xyafm/U="
 
-addons:
-  apt_packages:
-    - swig
-
 matrix:
   include:
     - os: linux
@@ -21,6 +17,9 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install swig; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then /usr/libexec/java_home -V; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository ppa:teward/swig3.0; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install swig3.0; fi
   - git submodule init
   - git submodule update
 

@@ -25,6 +25,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -y install cmake cmake-data g++-5; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo ln -s /usr/bin/swig3.0 /usr/bin/swig; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export COMPILER=g++-5; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX=g++-5; fi
   - git submodule init
   - git submodule update
 

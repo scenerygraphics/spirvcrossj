@@ -3,12 +3,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.scijava</groupId>
-        <artifactId>pom-scijava</artifactId>
-        <version>10.6.0</version>
-    </parent>
-
     <groupId>graphics.scenery</groupId>
     <artifactId>spirvcrossj</artifactId>
     <version>0.1-SNAPSHOT</version>
@@ -16,11 +10,18 @@
 
     <name>spirvcrossj</name>
     <description>Java bindings for Khronos' SPIRV-Cross</description>
+    <url>http://scenery.graphics</url>
+    <organization>
+        <name>scenery</name>
+        <url>http://scenery.graphics</url>
+    </organization>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <scijava.jvm.version>1.8</scijava.jvm.version>
+        <license.licenseName>BSD</license.licenseName>
+        <license.copyrightOwners>Ulrik Guenther, MPI-CBG</license.copyrightOwners>
     </properties>
 
     <developers>
@@ -30,12 +31,31 @@
             <email>hello@ulrik.is</email>
             <url>http://ulrik.is/</url>
             <roles>
-                <role>architect</role>
+                <role>lead</role>
                 <role>developer</role>
             </roles>
             <timezone>+1</timezone>
         </developer>
     </developers>
+
+    <contributors></contributors>
+
+    <mailingLists></mailingLists>
+
+    <scm>
+        <connection>scm:git:git://github.com/skalarproduktraum/spirvcrossj</connection>
+        <developerConnection>scm:git:git@github.com:skalarproduktraum/spirvcrossj</developerConnection>
+        <tag>HEAD</tag>
+        <url>http://scenery.graphics</url>
+    </scm>
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/skalarproduktraum/spirvcrossj/issues</url>
+    </issueManagement>
+    <ciManagement>
+        <system>Travis</system>
+        <url>https://travis-ci.org/skalarproduktraum/spirvcrossj/</url>
+    </ciManagement>
 
     <licenses>
         <license>
@@ -44,6 +64,17 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <distributionManagement>
+        <repository>
+            <id>imagej.releases</id>
+            <url>http://maven.imagej.net/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>imagej.snapshots</id>
+            <url>http://maven.imagej.net/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <profiles>
         <profile>
@@ -161,12 +192,31 @@
                         <directory>src/natives</directory>
                         <includes>
                             <include>**/*.dylib</include>
+                            <include>**/*.jnilib</include>
                         </includes>
                     </resource>
                 </resources>
             </build>
         </profile>
     </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.1</version>
+            </plugin>
+        </plugins>
+
+        <resources>
+            <resource>
+                <directory>src</directory>
+                <excludes>
+                    <exclude>natives/**</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
 
     <dependencies>
         <dependency>
@@ -177,4 +227,3 @@
     </dependencies>
 
 </project>
-

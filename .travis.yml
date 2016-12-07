@@ -38,4 +38,4 @@ script:
   - mvn package
 
 after_success:
-  - mvn -U -Pdeploy-to-imagej clean deploy --settings settings.xml
+  - mvn clean deploy --settings settings.xml

@@ -31,6 +31,6 @@ build:
 after_build:
   - cd java-wrapper
   - mvn clean package
-  - mvn -U -Pdeploy-to-imagej clean deploy --settings settings.xml
+  - mvn clean deploy --settings settings.xml
 cache:
   - C:\maven

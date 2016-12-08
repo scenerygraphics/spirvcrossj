@@ -161,7 +161,7 @@
             <id>platform-osx</id>
             <activation>
                 <os>
-                    <family>osx</family>
+                    <family>mac</family>
                 </os>
             </activation>
             <build>
@@ -177,9 +177,10 @@
                                     <goal>jar</goal>
                                 </goals>
                                 <configuration>
-                                    <classifier>natives-osx</classifier>
+                                    <classifier>natives-macos</classifier>
                                     <includes>
                                         <include>**/*.dylib</include>
+                                        <include>**/*.jnilib</include>
                                     </includes>
                                 </configuration>
                             </execution>

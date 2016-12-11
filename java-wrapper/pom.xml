@@ -73,6 +73,7 @@
         <snapshotRepository>
             <id>imagej.snapshots</id>
             <url>http://maven.imagej.net/content/repositories/snapshots</url>
+	    <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
     </distributionManagement>
 

@@ -10,7 +10,7 @@
 %rename(set) operator=;
 %rename(invoke) operator();
 %rename(less_than) operator<;
-//%rename(or) operator |;
+%rename(op_or) operator|;
 %rename("%(lowercamelcase)s", %$isfunction, %$not %$ismemberget, %$not %$ismemberset) "";
 %rename("%(lowercamelcase)s", %$isvariable) "";
 
@@ -47,8 +47,7 @@ namespace std {
     %template(BufferRangeVec) std::vector<spirv_cross::BufferRange>;
     %template(CombinedImageSamplerVec) std::vector<spirv_cross::CombinedImageSampler>;
     %template(MSLResourceBindingVec) std::vector<spirv_cross::MSLResourceBinding>;
+    %template(MSLVertexAttrVec) std::vector<spirv_cross::MSLVertexAttr>;
     %template(SpecializationConstantVec) std::vector<spirv_cross::SpecializationConstant>;
     %template(PlsRemapVec) std::vector<spirv_cross::PlsRemap>;
 }
-
-

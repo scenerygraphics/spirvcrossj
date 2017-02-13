@@ -14,6 +14,11 @@
 %rename("%(lowercamelcase)s", %$isfunction, %$not %$ismemberget, %$not %$ismemberset) "";
 %rename("%(lowercamelcase)s", %$isvariable) "";
 
+// for consistency due to incompatible change in SWIG 3.0.11
+// see https://github.com/swig/swig/issues/856
+%rename("add") std::vector::push_back;
+%rename("empty") std::vector::empty;
+
 %naturalvar SPIRConstant;
 %naturalvar SPIRType;
 

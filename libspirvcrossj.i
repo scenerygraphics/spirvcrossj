@@ -31,6 +31,14 @@
     #include "spirv_cpp.hpp"
     #include "spirv_msl.hpp"
 
+    #include "ShHandle.h" 
+    #include "revision.h" 
+    #include "ShaderLang.h" 
+    #include "GlslangToSpv.h" 
+    #include "GLSL.std.450.h" 
+    #include "disassemble.h"
+    #include "SPVRemapper.h"
+
     using namespace spirv_cross;
 %}
 
@@ -40,6 +48,15 @@
 %include "SPIRV-cross/spirv_glsl.hpp"
 %include "SPIRV-cross/spirv_cpp.hpp"
 %include "SPIRV-cross/spirv_msl.hpp"
+
+// glslang
+%include "glslang/glslang/Include/ShHandle.h" 
+%include "glslang/glslang/Include/revision.h" 
+%include "glslang/glslang/Public/ShaderLang.h" 
+%include "glslang/SPIRV/GlslangToSpv.h" 
+%include "glslang/SPIRV/GLSL.std.450.h" 
+%include "glslang/SPIRV/disassemble.h"
+%include "glslang/SPIRV/SPVRemapper.h"
 
 using namespace std;
 using namespace spv;

@@ -148,7 +148,7 @@
 
 // for consistency due to incompatible change in SWIG 3.0.11
 // see https://github.com/swig/swig/issues/856
-%rename("add") std::vector::push_back;
+%rename("add") std::vector::pushBack;
 %rename("empty") std::vector::empty;
 
 %naturalvar SPIRConstant;

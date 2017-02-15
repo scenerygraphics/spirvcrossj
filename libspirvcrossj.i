@@ -4,10 +4,121 @@
 %include "std_vector.i"
 %include "stdint.i"
 %include "std_string.i"
-%include "enums.swg"
+%include "enumtypeunsafe.swg"
 %include "cpointer.i"
 %include "arrays_java.i"
-%include "various.i"
+//%include "various.i"
+
+%typemap(jni) char **STRING_ARRAY "jobjectArray"
+%typemap(jtype) char **STRING_ARRAY "String[]"
+%typemap(jstype) char **STRING_ARRAY "String[]"
+%typemap(in) char **STRING_ARRAY (jint size) {
+  int i = 0;
+  if ($input) {
+    size = JCALL1(GetArrayLength, jenv, $input);
+    $1 = new char*[size+1];
+
+    for (i = 0; i<size; i++) {
+      jstring j_string = (jstring)JCALL2(GetObjectArrayElement, jenv, $input, i);
+      const char *c_string = JCALL2(GetStringUTFChars, jenv, j_string, 0);
+      $1[i] = new char [strlen(c_string)+1];
+
+      strncpy($1[i], c_string, strlen(c_string));
+      JCALL2(ReleaseStringUTFChars, jenv, j_string, c_string);
+      JCALL1(DeleteLocalRef, jenv, j_string);
+    }
+    $1[i] = 0;
+  } else {
+    $1 = 0;
+    size = 0;
+  }
+}
+
+// TODO: Fix memleak that results from not directly deallocating this.
+// Direct dealloc however leads to premature freeing of the memory, which
+// is assumed to be externally managed by glslang.
+/*%typemap(freearg) char **STRING_ARRAY {
+    std::cout << "Freeing array" << std:: endl;
+  int i;
+  for (i=0; i<size$argnum; i++)
+#ifdef __cplusplus
+    delete[] $1[i];
+  delete[] $1;
+#else
+  free($1[i]);
+  free($1);
+#endif
+}*/
+
+%typemap(out) char **STRING_ARRAY {
+  if ($1) {
+    int i;
+    jsize len=0;
+    jstring temp_string;
+    const jclass clazz = JCALL1(FindClass, jenv, "java/lang/String");
+
+    while ($1[len]) len++;
+    $result = JCALL3(NewObjectArray, jenv, len, clazz, NULL);
+    /* exception checking omitted */
+
+    for (i=0; i<len; i++) {
+      temp_string = JCALL1(NewStringUTF, jenv, *$1++);
+      JCALL3(SetObjectArrayElement, jenv, $result, i, temp_string);
+      JCALL1(DeleteLocalRef, jenv, temp_string);
+    }
+  }
+}
+
+%typemap(javain) char **STRING_ARRAY "$javainput"
+%typemap(javaout) char **STRING_ARRAY {
+    return $jnicall;
+  }
+
+//////
+%typemap(jni) std::string *INOUT, std::string *INOUT %{jobjectArray%}
+%typemap(jtype) std::string *INOUT, std::string *INOUT "java.lang.String[]"
+%typemap(jstype) std::string *INOUT, std::string *INOUT "java.lang.String[]"
+%typemap(javain) std::string *INOUT, std::string *INOUT "$javainput"
+
+%typemap(in) std::string *INOUT (std::string strTemp ), std::string *INOUT (std::string strTemp ) {
+  if (!$input) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "array null");
+    return $null;
+  }
+  if (JCALL1(GetArrayLength, jenv, $input) == 0) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, "Array must contain at least 1 element");
+    return $null;
+  }
+
+  jobject oInput = JCALL2(GetObjectArrayElement, jenv, $input, 0); 
+  if ( NULL != oInput ) {
+    jstring sInput = static_cast<jstring>( oInput );
+
+    const char * $1_pstr = (const char *)jenv->GetStringUTFChars(sInput, 0); 
+    if (!$1_pstr) return $null;
+    strTemp.assign( $1_pstr );
+    jenv->ReleaseStringUTFChars( sInput, $1_pstr);  
+  }
+
+  $1 = &strTemp;
+}
+
+%typemap(freearg) std::string *INOUT, std::string *INOUT ""
+
+%typemap(argout) std::string *INOUT, std::string *INOUT
+{ 
+  jstring jStrTemp = jenv->NewStringUTF( strTemp$argnum.c_str() );
+  JCALL3(SetObjectArrayElement, jenv, $input, 0, jStrTemp ); 
+}
+/////
+
+// ignore these, otherwise there will be duplicates from the parent class
+%ignore TLinker::infoSink;
+%ignore TCompiler::infoSink;
+%ignore TUniformMap::infoSink;
+
+%apply std::string *INOUT { std::string* output_string };
+%apply std::string *INOUT { std::string* outputString };
 
 %rename(equals) operator==;
 %rename(set) operator=;
@@ -22,31 +133,15 @@
 %ignore _ShLinkExt;
 %ignore ShLinkExt;
 
-%typemap(jstype) std::string* OUTPUT "String[]"
-%typemap(jtype) std::string* OUTPUT "String[]"
-%typemap(jni) std::string* OUTPUT "jobjectArray"
-%typemap(javain)  std::string* OUTPUT "$javainput"
-%typemap(in) std::string* OUTPUT (std::string *temp) {
-  if (!$input) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "array null");
-    return $null;
-  }
-  if (JCALL1(GetArrayLength, jenv, $input) == 0) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, "Array must contain at least 1 element");
-  }
-  $1 = &temp;
-}
-%typemap(argout) std::string* OUTPUT {
-  jstring jvalue = JCALL1(NewStringUTF, jenv, temp$argnum.c_str()); 
-  JCALL3(SetObjectArrayElement, jenv, $input, 0, jvalue);
-}
-
-%apply char **STRING_ARRAY { char **s }
+//%apply char **STRING_ARRAY { char **s }
 %apply char **STRING_ARRAY { const char* const* s }
 %apply char **STRING_ARRAY { const char* const* names }
-%apply std::string *OUTPUT { std::string* output_string }
 
-%apply int *IN { const int* l }
+%typemap(freearg) char **STRING_ARRAY {
+    cout << "Freeing the string array" << endl;
+}
+
+%apply int *INOUT { const int* l }
 
 %pointer_functions(int, IntPointer);
 %pointer_functions(std::string, StringPointer);

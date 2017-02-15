@@ -19,23 +19,26 @@ endif()
 set(SPIRVCROSS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/SPIRV-cross")
 set(GLSLANG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/glslang")
 
+add_subdirectory("${GLSLANG_DIR}")
+
 set(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_SOURCE_DIR}/java-wrapper/src/main/java/graphics/scenery/spirvcrossj")
 set(CMAKE_SWIG_FLAGS -package graphics.scenery.spirvcrossj)
 
 SET_SOURCE_FILES_PROPERTIES(libspirvcrossj.i PROPERTIES CPLUSPLUS ON)
+#SET_PROPERTY(SOURCE libspirvcrossj.i PROPERTY CPLUSPLUS ON)
 
-FILE(GLOB GLSLANG_HLSL_SOURCES ${GLSLANG_DIR}/hlsl/*.cpp)
-FILE(GLOB GLSLANG_SPIRV_SOURCES ${GLSLANG_DIR}/SPIRV/*.cpp)
-FILE(GLOB GLSLANG_CODEGEN_SOURCES ${GLSLANG_DIR}/glslang/GenericCodeGen/*.cpp)
-FILE(GLOB GLSLANG_OGLDLL_SOURCES ${GLSLANG_DIR}/OGLCompilersDLL/*.cpp)
-FILE(GLOB GLSLANG_MI_SOURCES ${GLSLANG_DIR}/glslang/MachineIndependent/*.cpp)
-FILE(GLOB GLSLANG_PREPROCESSOR_SOURCES ${GLSLANG_DIR}/glslang/MachineIndependent/preprocessor/*.cpp)
-
-if(WIN32)
-    FILE(GLOB GLSLANG_MD_SOURCES ${GLSLANG_DIR}/glslang/OSDependent/Windows/*.cpp)
-elseif(UNIX)
-    FILE(GLOB GLSLANG_MD_SOURCES ${GLSLANG_DIR}/glslang/OSDependent/Unix/*.cpp)
-endif(WIN32)
+#FILE(GLOB GLSLANG_CODEGEN_SOURCES ${GLSLANG_DIR}/glslang/GenericCodeGen/*.cpp)
+#FILE(GLOB GLSLANG_MI_SOURCES ${GLSLANG_DIR}/glslang/MachineIndependent/*.cpp)
+#FILE(GLOB GLSLANG_PREPROCESSOR_SOURCES ${GLSLANG_DIR}/glslang/MachineIndependent/preprocessor/*.cpp)
+#FILE(GLOB GLSLANG_HLSL_SOURCES ${GLSLANG_DIR}/hlsl/*.cpp)
+#FILE(GLOB GLSLANG_SPIRV_SOURCES ${GLSLANG_DIR}/SPIRV/*.cpp)
+#FILE(GLOB GLSLANG_OGLDLL_SOURCES ${GLSLANG_DIR}/OGLCompilersDLL/*.cpp)
+#
+#if(WIN32)
+#    FILE(GLOB GLSLANG_MD_SOURCES ${GLSLANG_DIR}/glslang/OSDependent/Windows/*.cpp)
+#elseif(UNIX)
+#    FILE(GLOB GLSLANG_MD_SOURCES ${GLSLANG_DIR}/glslang/OSDependent/Unix/*.cpp)
+#endif(WIN32)
 
 SWIG_ADD_MODULE(spirvcrossj java libspirvcrossj.i 
     ${SPIRVCROSS_DIR}/GLSL.std.450.h
@@ -44,13 +47,23 @@ SWIG_ADD_MODULE(spirvcrossj java libspirvcrossj.i
 	${SPIRVCROSS_DIR}/spirv_cpp.cpp
 	${SPIRVCROSS_DIR}/spirv_msl.cpp
 	${SPIRVCROSS_DIR}/spirv_cfg.cpp
-	${GLSLANG_HLSL_SOURCES}
-	${GLSLANG_SPIRV_SOURCES}
-	${GLSLANG_CODEGEN_SOURCES}
-	${GLSLANG_MI_SOURCES}
-	${GLSLANG_OGLDLL_SOURCES}
-	${GLSLANG_PREPROCESSOR_SOURCES}
-	${GLSLANG_MD_SOURCES})
+    ${GLSLANG_DIR}/glslang/Public/ShaderLang.h
+    ${GLSLANG_DIR}/StandAlone/ResourceLimits.h)
+#	${GLSLANG_MI_SOURCES}
+#	${GLSLANG_PREPROCESSOR_SOURCES}
+#	${GLSLANG_CODEGEN_SOURCES}
+#	${GLSLANG_MD_SOURCES}
+#	${GLSLANG_SPIRV_SOURCES}
+#	${GLSLANG_HLSL_SOURCES}
+#	${GLSLANG_OGLDLL_SOURCES})
+
+set(GLSLANG_LIBRARIES
+    glslang
+    SPIRV
+    SPVRemapper
+    glslang-default-resource-limits)
+
+SWIG_LINK_LIBRARIES(spirvcrossj ${GLSLANG_LIBRARIES})
 
 target_include_directories(spirvcrossj PUBLIC "${GLSLANG_DIR}/glslang/Include")
 target_include_directories(spirvcrossj PUBLIC "${GLSLANG_DIR}/glslang/Public")

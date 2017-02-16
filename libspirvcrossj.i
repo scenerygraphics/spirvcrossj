@@ -8,6 +8,12 @@
 %include "cpointer.i"
 %include "arrays_java.i"
 
+%javaconst(1);
+
+%typemap(javaimports) EShLanguageMask %{
+import static graphics.scenery.spirvcrossj.EShLanguage.*;
+%}
+
 // for consistency due to incompatible change in SWIG 3.0.11
 // see https://github.com/swig/swig/issues/856
 %rename("pushBack") std::vector::push_back;

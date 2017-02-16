@@ -7,7 +7,11 @@
 %include "enumtypeunsafe.swg"
 %include "cpointer.i"
 %include "arrays_java.i"
-//%include "various.i"
+
+// for consistency due to incompatible change in SWIG 3.0.11
+// see https://github.com/swig/swig/issues/856
+%rename("pushBack") std::vector::push_back;
+%rename("empty") std::vector::empty;
 
 %typemap(jni) char **STRING_ARRAY "jobjectArray"
 %typemap(jtype) char **STRING_ARRAY "String[]"
@@ -24,6 +28,7 @@
       $1[i] = new char [strlen(c_string)+1];
 
       strncpy($1[i], c_string, strlen(c_string));
+      $1[i][strlen(c_string)] = 0;
       JCALL2(ReleaseStringUTFChars, jenv, j_string, c_string);
       JCALL1(DeleteLocalRef, jenv, j_string);
     }
@@ -145,11 +150,6 @@
 
 %pointer_functions(int, IntPointer);
 %pointer_functions(std::string, StringPointer);
-
-// for consistency due to incompatible change in SWIG 3.0.11
-// see https://github.com/swig/swig/issues/856
-%rename("add") std::vector::pushBack;
-%rename("empty") std::vector::empty;
 
 %naturalvar SPIRConstant;
 %naturalvar SPIRType;

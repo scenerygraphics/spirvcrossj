@@ -16,7 +16,7 @@ matrix:
             - sourceline: 'ppa:teward/swig3.0'
             - sourceline: 'ppa:george-edison55/precise-backports'
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
-            - sourceline: 'ppa:llvm-toolchain-precise-3.6/test'
+            - llvm-toolchain-precise-3.6
           packages:
             - swig3.0
             - cmake

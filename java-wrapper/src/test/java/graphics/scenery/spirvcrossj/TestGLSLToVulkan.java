@@ -135,6 +135,9 @@ public class TestGLSLToVulkan {
         libspirvcrossj.glslangToSpv(program.getIntermediate(shaderType), spirv);
 
         System.out.println("Generated " + spirv.capacity() + " bytes of SPIRV bytecode.");
+
+        System.out.println(shader);
+        System.out.println(program);
       }
 
     }

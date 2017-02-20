@@ -24,15 +24,19 @@ public class TestGLSLToVulkan {
     List<String> spvFileList = in.lines().collect(Collectors.toList());
     in.close();
 
+    if (!libspirvcrossj.initializeProcess()) {
+      throw new RuntimeException("glslang failed to initialize.");
+    }
+
+    final SWIGTYPE_p_TBuiltInResource resources = libspirvcrossj.getDefaultTBuiltInResource();
+
+    System.err.println("Waiting for debugger...");
+
     for (String filename : spvFileList) {
-      if (!libspirvcrossj.initializeProcess()) {
-        throw new RuntimeException("glslang failed to initialize.");
-      }
 
       Boolean compileFail = false;
       Boolean linkFail = false;
       final TProgram program = new TProgram();
-      final SWIGTYPE_p_TBuiltInResource resources = libspirvcrossj.getDefaultTBuiltInResource();
       final String[] names = {filename};
 
       final String code;
@@ -82,12 +86,10 @@ public class TestGLSLToVulkan {
 
       final Boolean shouldFail = code.contains("ERROR");
       if (shouldFail) {
-        System.out.println("This file is expected not to compile.");
+        System.out.println("This file is expected not to compile successfully.");
       }
 
-      final int[] sizes = {0};
-      sizes[0] = -1;
-      shader.setStringsWithLengths(dummyShader, sizes, 1);
+      shader.setStrings(dummyShader, 1);
 
       shader.setAutoMapBindings(true);
 
@@ -135,7 +137,8 @@ public class TestGLSLToVulkan {
         System.out.println("Generated " + spirv.capacity() + " bytes of SPIRV bytecode.");
       }
 
-      libspirvcrossj.finalizeProcess();
     }
+
+    libspirvcrossj.finalizeProcess();
   }
 }

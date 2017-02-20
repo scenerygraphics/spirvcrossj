@@ -1,7 +1,14 @@
 #!/bin/sh
+SPIRVCROSSJ_DIR=`pwd`
+git submodule update
+cd $SPIRVCROSSJ_DIR/glslang && git apply ../fix_tokenizer.patch
+
+cd $SPIRVCROSSJ_DIR
 mkdir build
+rm -rf build/*
 cd build
 cmake ..
-make
-cd ../java-wrapper
-mvn package
+cmake --build .
+
+cd $SPIRVCROSSJ_DIR/java-wrapper
+mvn clean package

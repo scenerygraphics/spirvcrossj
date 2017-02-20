@@ -1,0 +1,12 @@
+spv.100ops.frag
+spv.150.vert
+spv.430.vert
+spv.450.tesc
+spv.always-discard2.frag
+spv.bitCast.frag
+spv.bool.vert
+spv.boolInBlock.frag
+spv.branch-return.vert
+spv.conditionalDiscard.frag
+spv.conversion.frag
+spvFileList.txt

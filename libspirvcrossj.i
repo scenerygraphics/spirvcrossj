@@ -22,34 +22,33 @@ import static graphics.scenery.spirvcrossj.EShLanguage.*;
 %typemap(jni) char **STRING_ARRAY "jobjectArray"
 %typemap(jtype) char **STRING_ARRAY "String[]"
 %typemap(jstype) char **STRING_ARRAY "String[]"
+
 %typemap(in) char **STRING_ARRAY (jint size) {
   int i = 0;
-  if ($input) {
-    size = JCALL1(GetArrayLength, jenv, $input);
-    $1 = new char*[size+1];
-
-    for (i = 0; i<size; i++) {
-      jstring j_string = (jstring)JCALL2(GetObjectArrayElement, jenv, $input, i);
-      const char *c_string = JCALL2(GetStringUTFChars, jenv, j_string, 0);
-      $1[i] = new char [strlen(c_string)+1];
-
-      strncpy($1[i], c_string, strlen(c_string));
-      $1[i][strlen(c_string)] = 0;
-      JCALL2(ReleaseStringUTFChars, jenv, j_string, c_string);
-      JCALL1(DeleteLocalRef, jenv, j_string);
-    }
-    $1[i] = 0;
-  } else {
-    $1 = 0;
-    size = 0;
+  size = (*jenv).GetArrayLength($input);
+  $1 = (char**)calloc(size, sizeof(char*));
+  //std::cout << "Array length: " << size << std::endl;
+  /* make a copy of each string */
+  for (i = 0; i<size; ++i) {
+    jstring j_string = (jstring)(*jenv).GetObjectArrayElement($input, i);
+    const char* c_string = (*jenv).GetStringUTFChars(j_string, NULL);
+    //std::cout << "in (" << strlen(c_string) << "): >>>" << c_string  << "<<<" << std::endl;
+    $1[i] = (char*)calloc(strlen(c_string), sizeof(char));
+    strcpy($1[i], c_string);
+    //std::cout << "putting null at " << strlen(c_string) << std::endl;
+    //std::cout << "out: >>>" << $1[i] << "<<<" << std::endl;
+    (*jenv).ReleaseStringUTFChars(j_string, c_string);
+    (*jenv).DeleteLocalRef(j_string);
   }
+//  std::cout << i << std::endl;
+//  $1[i] = 0;
 }
 
 // TODO: Fix memleak that results from not directly deallocating this.
 // Direct dealloc however leads to premature freeing of the memory, which
 // is assumed to be externally managed by glslang.
-/*%typemap(freearg) char **STRING_ARRAY {
-    std::cout << "Freeing array" << std:: endl;
+%typemap(freearg) const char **STRING_ARRAY {
+/*    std::cout << "Freeing array" << std:: endl;
   int i;
   for (i=0; i<size$argnum; i++)
 #ifdef __cplusplus
@@ -59,7 +58,8 @@ import static graphics.scenery.spirvcrossj.EShLanguage.*;
   free($1[i]);
   free($1);
 #endif
-}*/
+  */
+}
 
 %typemap(out) char **STRING_ARRAY {
   if ($1) {

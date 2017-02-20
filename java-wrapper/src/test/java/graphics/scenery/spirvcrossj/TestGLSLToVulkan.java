@@ -2,8 +2,12 @@ package graphics.scenery.spirvcrossj;
 
 import org.junit.Test;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <Description>
@@ -16,93 +20,122 @@ public class TestGLSLToVulkan {
   public void convertGLSLToVulkan() throws IOException, URISyntaxException, InterruptedException {
     Loader.loadNatives();
 
-    libspirvcrossj.initializeProcess();
+    BufferedReader in = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("spvFileList.txt")));
+    List<String> spvFileList = in.lines().collect(Collectors.toList());
+    in.close();
 
-    Boolean compileFail = false;
-    Boolean linkFail = false;
-    final TProgram program = new TProgram();
-    final TShader shader = new TShader(EShLanguage.EShLangVertex);
-    final SWIGTYPE_p_TBuiltInResource resources = libspirvcrossj.getDefaultTBuiltInResource();
-    final String[] names = {"dummy.vert"};
+    for (String filename : spvFileList) {
+      if (!libspirvcrossj.initializeProcess()) {
+        throw new RuntimeException("glslang failed to initialize.");
+      }
 
-    final String dummyShader[] = {
-            "#version 450\n" +
-                    "\n" +
-                    "layout(location = 0) out vec2 textureCoord;\n" +
-                    "\n" +
-                    "void main()\n" +
-                    "{\n" +
-                    "    textureCoord = vec2((gl_VertexIndex << 1) & 2, gl_VertexIndex & 2);\n" +
-                    "    gl_Position = vec4(textureCoord * 2.0f - 1.0f, 0.0f, 1.0f);\n" +
-                    "}"
+      Boolean compileFail = false;
+      Boolean linkFail = false;
+      final TProgram program = new TProgram();
+      final SWIGTYPE_p_TBuiltInResource resources = libspirvcrossj.getDefaultTBuiltInResource();
+      final String[] names = {filename};
 
-    };
+      final String code;
+      try {
+        BufferedReader spvReader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(filename)));
+        code = spvReader.lines().collect(Collectors.joining("\n"));
+        spvReader.close();
+      } catch(NullPointerException e) {
+        continue;
+      }
 
-    System.out.println("Shader code (" + dummyShader[0].length() + " bytes):\n" + dummyShader[0] + "\n--------------");
+      final String dummyShader[] = {
+              code
+      };
 
-    final TShader.Includer inc = new TShader.ForbidIncluder();
+      final String extension = filename.substring(filename.lastIndexOf('.')+1);
+      int shaderType = 0;
 
-    final String[] output = new String[5];
-    final int[] sizes = {0};
-    sizes[0] = -1;
-    shader.setStringsWithLengths(dummyShader, sizes, 1);
+      switch(extension) {
+        case "vert":
+          shaderType = EShLanguage.EShLangVertex;
+          break;
+        case "frag":
+          shaderType = EShLanguage.EShLangFragment;
+          break;
+        case "geom":
+          shaderType = EShLanguage.EShLangGeometry;
+          break;
+        case "tesc":
+          shaderType = EShLanguage.EShLangTessControl;
+          break;
+        case "tese":
+          shaderType = EShLanguage.EShLangTessEvaluation;
+          break;
+        case "comp":
+          shaderType = EShLanguage.EShLangCompute;
+          break;
+        case "txt":
+          continue;
+        default:
+          throw new RuntimeException("Unknown shader extension ." + extension);
+      }
 
-    /*if(shader.preprocess(resources, 450, EProfile.ECoreProfile,
-            false, true, EShMessages.EShMsgDefault, output, inc)) {
-      System.out.println("Preprocessing done.");
-    } else {
-      System.out.println("Debug log: " + shader.getInfoDebugLog());
-      System.out.println("Info log: " + shader.getInfoLog());
-      throw new RuntimeException("Preprocessing failed.");
-    }*/
+      final TShader shader = new TShader(shaderType);
 
-    shader.setAutoMapBindings(true);
+      System.out.println(filename + ": Compiling shader code  (" + dummyShader[0].length() + " bytes)... ");
 
-    int messages = EShMessages.EShMsgDefault;
-    messages |= EShMessages.EShMsgVulkanRules;
-    messages |= EShMessages.EShMsgSpvRules;
+      final Boolean shouldFail = code.contains("ERROR");
+      if (shouldFail) {
+        System.out.println("This file is expected not to compile.");
+      }
 
-    if(!shader.parse(resources, 450, false, messages)) {
-      compileFail = true;
+      final int[] sizes = {0};
+      sizes[0] = -1;
+      shader.setStringsWithLengths(dummyShader, sizes, 1);
+
+      shader.setAutoMapBindings(true);
+
+      int messages = EShMessages.EShMsgDefault;
+      messages |= EShMessages.EShMsgVulkanRules;
+      messages |= EShMessages.EShMsgSpvRules;
+
+      if (!shader.parse(resources, 450, false, messages)) {
+        compileFail = true;
+      }
+
+      if (compileFail && !shouldFail) {
+        System.out.println("Info log: " + shader.getInfoLog());
+        System.out.println("Debug log: " + shader.getInfoDebugLog());
+        throw new RuntimeException("Compilation of " + filename + " failed");
+      }
+
+      if(compileFail && shouldFail) {
+        System.out.println("Linking skipped as compilation was expected to fail...");
+        continue;
+      }
+
+      program.addShader(shader);
+
+      if (!program.link(EShMessages.EShMsgDefault)) {
+        linkFail = true;
+      }
+
+      if (!program.mapIO()) {
+        linkFail = true;
+      }
+
+
+      if (linkFail && !shouldFail) {
+        System.err.println(program.getInfoLog());
+        System.err.println(program.getInfoDebugLog());
+
+        throw new RuntimeException("Linking of program " + filename + " failed!");
+      }
+
+      if(!linkFail && !compileFail && !shouldFail) {
+        final IntVec spirv = new IntVec();
+        libspirvcrossj.glslangToSpv(program.getIntermediate(shaderType), spirv);
+
+        System.out.println("Generated " + spirv.capacity() + " bytes of SPIRV bytecode.");
+      }
+
+      libspirvcrossj.finalizeProcess();
     }
-
-    System.out.println("Info log: " + shader.getInfoLog());
-    System.out.println("Debug log: " + shader.getInfoDebugLog());
-
-    if(compileFail) {
-      throw new RuntimeException("Compilation failed");
-    }
-    System.out.println("----------------");
-    System.out.println("Linking program...");
-
-    program.addShader(shader);
-
-    if(!program.link(EShMessages.EShMsgDefault)) {
-      System.err.println("Linking failed!");
-      linkFail = true;
-    }
-
-    if(!program.mapIO()) {
-      System.err.println("IO mapping failed!");
-      linkFail = true;
-    }
-
-    System.err.println(program.getInfoLog());
-    System.err.println(program.getInfoDebugLog());
-
-    if(linkFail || compileFail) {
-      throw new RuntimeException("Linking failed!");
-    }
-
-//    program.buildReflection();
-//    program.dumpReflection();
-
-    final IntVec spirv = new IntVec();
-
-    libspirvcrossj.glslangToSpv(program.getIntermediate(EShLanguage.EShLangVertex), spirv);
-
-    System.out.println("Generated " + spirv.capacity() + " bytes of SPIRV bytecode.");
-
-    libspirvcrossj.finalizeProcess();
   }
 }

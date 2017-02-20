@@ -6,6 +6,7 @@ FIND_PACKAGE(SWIG 3.0 REQUIRED)
 INCLUDE(${SWIG_USE_FILE})
 
 FIND_PACKAGE(JNI REQUIRED)
+FIND_PACKAGE (Threads REQUIRED)
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/java-wrapper/src/natives")
 
@@ -64,6 +65,7 @@ set(GLSLANG_LIBRARIES
     glslang-default-resource-limits)
 
 SWIG_LINK_LIBRARIES(spirvcrossj ${GLSLANG_LIBRARIES})
+SWIG_LINK_LIBRARIES(spirvcrossj ${CMAKE_THREAD_LIBS_INIT})
 
 target_include_directories(spirvcrossj PUBLIC "${GLSLANG_DIR}/glslang/Include")
 target_include_directories(spirvcrossj PUBLIC "${GLSLANG_DIR}/glslang/Public")
@@ -79,7 +81,7 @@ target_include_directories(spirvcrossj PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/SPIRV
 # -DCMAKE_CXX_COMPILE_FLAGS
 # However, we require the C++11 dialect.
 if (NOT "${MSVC}")
-  set(spirv-compiler-options -std=c++11 -Wall -Wextra -Wunused -Wshadow)
+  set(spirv-compiler-options -std=c++11 -Wall -Wextra -pthread -Wshadow)
   target_compile_options(spirvcrossj PRIVATE ${spirv-compiler-options})
   set_source_files_properties( ${swig_generated_file_fullname}
                              PROPERTIES COMPILE_FLAGS ${spirv-compiler-options})

@@ -136,8 +136,8 @@ public class TestGLSLToVulkan {
 
         System.out.println("Generated " + spirv.capacity() + " bytes of SPIRV bytecode.");
 
-        System.out.println(shader);
-        System.out.println(program);
+        //System.out.println(shader);
+        //System.out.println(program);
       }
 
     }

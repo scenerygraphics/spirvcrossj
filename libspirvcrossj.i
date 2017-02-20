@@ -29,11 +29,11 @@ import static graphics.scenery.spirvcrossj.EShLanguage.*;
   $1 = (char**)calloc(size, sizeof(char*));
   //std::cout << "Array length: " << size << std::endl;
   /* make a copy of each string */
-  for (i = 0; i<size; ++i) {
+  for (i = 0; i < size; ++i) {
     jstring j_string = (jstring)(*jenv).GetObjectArrayElement($input, i);
     const char* c_string = (*jenv).GetStringUTFChars(j_string, NULL);
     //std::cout << "in (" << strlen(c_string) << "): >>>" << c_string  << "<<<" << std::endl;
-    $1[i] = (char*)calloc(strlen(c_string), sizeof(char));
+    $1[i] = (char*)calloc(strlen(c_string)+1, sizeof(char));
     strcpy($1[i], c_string);
     //std::cout << "putting null at " << strlen(c_string) << std::endl;
     //std::cout << "out: >>>" << $1[i] << "<<<" << std::endl;

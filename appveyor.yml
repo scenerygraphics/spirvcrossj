@@ -34,6 +34,7 @@ build:
 after_build:
   - cd java-wrapper
   - mvn clean package
-  - mvn clean deploy --settings settings.xml
+on_success:
+  - ps: if($env:appveyor_repo_branch -eq 'master' -and $env:appveyor_pull_request_title -eq '') { mvn clean deploy --settings settings.xml }
 cache:
   - C:\maven

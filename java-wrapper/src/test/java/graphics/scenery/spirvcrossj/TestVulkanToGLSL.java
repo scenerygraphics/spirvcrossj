@@ -25,7 +25,7 @@ public class TestVulkanToGLSL {
     IntBuffer ib = data.asIntBuffer();
 
     while(ib.hasRemaining()) {
-      spirv.add(ib.get());
+      spirv.pushBack(ib.get());
     }
 
     System.out.println("Read " + ib.position() + " longs from SPIR-V binary.\n");

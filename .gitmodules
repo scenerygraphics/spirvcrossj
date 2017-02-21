@@ -1,3 +1,6 @@
 [submodule "SPIRV-cross"]
 	path = SPIRV-cross
 	url = https://github.com/KhronosGroup/SPIRV-cross.git
+[submodule "glslang"]
+	path = glslang
+	url = https://github.com/KhronosGroup/glslang

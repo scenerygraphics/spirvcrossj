@@ -1,0 +1,13 @@
+diff --git a/glslang/MachineIndependent/Scan.cpp b/glslang/MachineIndependent/Scan.cpp
+index 0e64364e..a1af77a4 100644
+--- a/glslang/MachineIndependent/Scan.cpp
++++ b/glslang/MachineIndependent/Scan.cpp
+@@ -719,6 +719,8 @@ int TScanContext::tokenize(TPpContext* pp, TParserToken& token)
+ 
+         case EndOfInput:               return 0;
+ 
++        case 0: return 0;
++
+         default:
+             char buf[2];
+             buf[0] = (char)token;

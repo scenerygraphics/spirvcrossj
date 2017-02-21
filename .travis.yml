@@ -51,3 +51,5 @@ deploy:
   file: "java-wrapper/target/*.jar"
   on:
     repo: scenerygraphics/spirvcrossj
+    tags: true
+    all_branches: true

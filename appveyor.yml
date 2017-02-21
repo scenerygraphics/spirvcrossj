@@ -45,7 +45,7 @@ deploy:
   auth_token:
     secure: fW/OV8mVZzuvrbnq3jwqVHJbFkJFoX0muJJVTJdgqkO0366i5rj/xrVLKTGTk09X 
   artifact: /.*\.jar/
-  draft: false
+  draft: true
   prerelease: false
   on:
     branch: master

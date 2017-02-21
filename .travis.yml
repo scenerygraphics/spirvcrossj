@@ -41,13 +41,13 @@ script:
 - mvn package
 after_success:
 - mvn clean deploy --settings settings.xml
-before_deploy:
-- export RELEASE_FILES=$(ls target/*.jar)
+
 deploy:
   provider: releases
+  skip_cleanup: true
   api_key:
     secure: fElUd01e0PkVUGXgglJRYeslN5SsicUdWy9ltvXIgb2o9F6H/UNGEdGvkJlBumN7IHrVrOdCfEAzBf0xrJiYjuvvzoxkjGOmb0wcdQfKMd2DomH5e+Q86/WRGiIIcfYigpI6/gcIm0CVgbSgwEjwxbM1JoVkGToW6YNgbyNmq3gW9JZbLQtvCgs9vsgkKjlcrrdsIqJzELrihXoyep2AW4J38V4TpYAwpTkj2cucvV4d/pFQfW0drEpCQSV24J9EWW/hZOUMFqr0q+PyAIPQHCDRLgqNp3qUmHrP/FsRR7NQ5xGMvLAQEagNC7HiA5oJ6SKptii668X0W6RlAL8ei0y40qphYy1N/ttkgcGAoMHZrCLxkqDQtw7GXVfXULGrIoVIMaWYObRA8iPXk0y1Bf8ik+qWUHuExmk+rWyGHMYCDNmQmtf1zKsIcDpba4nBJbauC5QaXmuCQg/q6ExYFm054wky6iq7SqdhrFZ3++sguNPtUuamzM+JsFwXRabOrRLvt4PwqoHopuNkGCWmI3Q95ez7iWKTaOju78kNhNMW+7DORWIBxvLjf0jDLvk1QwIlFHtbWVdU1LecUTIx3IdnfOkxPpHaRoU8E6JJKLav0mFLITNOhtwVAgEQ/TrtraZtfxcZlai8aeH4nxbmnNXhIuzQmackyvk62hd/YjQ=
   file_glob: true
-  file: "${RELEASE_FILES}"
+  file: "java-wrapper/target/*.jar"
   on:
     repo: scenerygraphics/spirvcrossj

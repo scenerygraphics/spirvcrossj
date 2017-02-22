@@ -1,6 +1,6 @@
-$url = "https://files.gpg4win.org/gpg4win-vanilla-2.3.3.exe"
-$output = "gpg4win-vanilla-2.3.3.exe"
-$shahash = "a105cc82d60a315a14a4f69ea783a83baa434e55"
+$url = "https://files.gpg4win.org/gpg4win-2.3.3.exe"
+$output = "gpg4win-2.3.3.exe"
+$shahash = "67e13c4f90ff6a70ad57bd31af64a238c9315308"
 
 Invoke-WebRequest -Uri $url -OutFile $output
 

@@ -31,7 +31,7 @@ install:
   - cmd: mvn --version
   - cmd: java -version
   - cmd: choco install swig
-  - cmd: choco install gpg4win-vanilla -y --force
+  - ps: .\deploy\install-gnupg.ps1
   - cmd: nuget install secure-file -ExcludeVersion
   - cmd: SET PATH=C:\Program Files (x86)\GNU\GnuPG;%PATH%
 before_build:

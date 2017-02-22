@@ -44,6 +44,7 @@ install:
   - ps: .\deploy\install-gnupg.ps1
   - cmd: nuget install secure-file -ExcludeVersion
   - cmd: SET PATH=C:\Program Files (x86)\GNU\GnuPG;%PATH%
+  - ps: $env:Path += ";C:\Program Files (x86)\GNU\GnuPG"
 
 before_build:
   - git submodule init

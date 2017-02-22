@@ -11,7 +11,7 @@ REPOSITORY_ID="ossrh"
 SNAPSHOT_REPOSITORY="https://oss.sonatype.org/content/repositories/snapshots"
 RELEASE_REPOSITORY="https://oss.sonatype.org/service/local/staging/deploy/maven2/"
 
-VERSION=`MAVEN_OPTS="mvn org.apache.maven.plugins:maven-help-plugin:2.2:evaluate -Dexpression=project.version |grep -Ev '(^\[|Download\w+:)'`
+VERSION=`mvn org.apache.maven.plugins:maven-help-plugin:2.2:evaluate -Dexpression=project.version |grep -Ev '(^\[|Download\w+:)'`
 PLATFORM=`mvn help:active-profiles | grep platform | awk '{print $2}'`
 
 if [ "$PLATFORM" == "platform-osx" ]

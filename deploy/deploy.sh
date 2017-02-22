@@ -11,7 +11,7 @@ REPOSITORY_ID="ossrh"
 SNAPSHOT_REPOSITORY="https://oss.sonatype.org/content/repositories/snapshots"
 RELEASE_REPOSITORY="https://oss.sonatype.org/service/local/staging/deploy/maven2/"
 
-VERSION=`MAVEN_OPTS="-Dorg.slf4j.simpleLogger.defaultLogLevel=WARN -Dorg.slf4j.simpleLogger.log.org.apache.maven.plugins.help=INFO" mvn help:evaluate -o -Dexpression=project.version | tail -1`
+VERSION=`MAVEN_OPTS="-Dorg.slf4j.simpleLogger.defaultLogLevel=WARN -Dorg.slf4j.simpleLogger.log.org.apache.maven.plugins.help=INFO" mvn org.apache.maven.plugins:maven-help-plugin:2.2:evaluate -Dexpression=project.version | tail -1`
 PLATFORM=`mvn help:active-profiles | grep platform | awk '{print $2}'`
 
 if [ "$PLATFORM" == "platform-osx" ]

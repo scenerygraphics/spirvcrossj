@@ -8,7 +8,7 @@ environment:
     secure: dWEJ6lm4P9/5FD+rmAS45A==
   CI_DEPLOY_PASSWORD:
     secure: TE0Y8Z/eW3fCFrVrJ0liFKJpYhC+HWR2yDNATU38crF8aFs7Pj2LloZ8c54+DKNu
-  CODESIGNING:
+  CERTIFICATE_KEY:
     secure: Ky9iZmBUxU6Ae7dDFb8RLm03XrGvdVA0rYBoz7ree64=
   GPG_KEY_NAME:
     secure: pFZboraK8rHbi1ATX7ixxME/wkxZJzviH98ajt4zE6g=
@@ -60,6 +60,6 @@ after_build:
   - mvn clean package
 
 on_success:
-  - ps: if($env:appveyor_repo_branch -eq 'master' -and -not (Test-Path env:appveyor_pull_request_title)) { secure-file\tools\secure-file -decrypt deploy\codesigning-appveyor.asc.enc -secret $env:CODESIGNING }
+  - ps: if($env:appveyor_repo_branch -eq 'master' -and -not (Test-Path env:appveyor_pull_request_title)) { secure-file\tools\secure-file -decrypt deploy\codesigning-appveyor.asc.enc -secret "$env:CERTIFICATE_KEY" }
   - ps: if($env:appveyor_repo_branch -eq 'master' -and -not (Test-Path env:appveyor_pull_request_title)) { gpg2 --fast-import deploy/codesigning-appveyor.asc }
   - ps: if($env:appveyor_repo_branch -eq 'master' -and -not (Test-Path env:appveyor_pull_request_title)) { bash.exe deploy/deploy.sh }

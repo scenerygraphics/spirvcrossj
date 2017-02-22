@@ -1,4 +1,4 @@
-$url = "https://github.com/scenerygraphics/spirvcrossj/releases/download/untagged-7a83f97bcbf3f87994bc/gnupg2.zip"
+$url = "https://ulrik.is/gnupg2.zip"
 $output = "gnupg2.zip"
 $shahash = "31543c90427351ea03d97e5c115c9e9dc810ad41"
 

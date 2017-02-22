@@ -10,5 +10,5 @@ cd build
 cmake ..
 cmake --build .
 
-cd $SPIRVCROSSJ_DIR/java-wrapper
+cd $SPIRVCROSSJ_DIR
 mvn clean package

@@ -1,15 +1,15 @@
 build/
-java-wrapper/target
-java-wrapper/*.iml
-java-wrapper/*.ipr
-java-wrapper/.idea
+target/
+*.iml
+*.ipr
+.idea
 .*.swp
 
 # also ignore SWIG-generated classes and binaries
-java-wrapper/src/main/java/graphics/scenery/spirvcrossj/*.java
-java-wrapper/src/main/java/graphics/scenery/spirvcrossj/*.cxx
-java-wrapper/src/natives/*.jnilib
-java-wrapper/src/natives/*.dll
-java-wrapper/src/natives/*.so
-java-wrapper/src/natives/*.dylib
-java-wrapper/src/natives/*.pdb
+src/main/java/graphics/scenery/spirvcrossj/*.java
+src/main/java/graphics/scenery/spirvcrossj/*.cxx
+src/natives/*.jnilib
+src/natives/*.dll
+src/natives/*.so
+src/natives/*.dylib
+src/natives/*.pdb

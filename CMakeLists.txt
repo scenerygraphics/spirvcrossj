@@ -8,7 +8,7 @@ INCLUDE(${SWIG_USE_FILE})
 FIND_PACKAGE(JNI REQUIRED)
 FIND_PACKAGE (Threads REQUIRED)
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/java-wrapper/src/natives")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/natives")
 
 
 if(${CMAKE_GENERATOR} MATCHES "Makefile")
@@ -22,7 +22,7 @@ set(GLSLANG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/glslang")
 
 add_subdirectory("${GLSLANG_DIR}")
 
-set(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_SOURCE_DIR}/java-wrapper/src/main/java/graphics/scenery/spirvcrossj")
+set(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_SOURCE_DIR}/src/main/java/graphics/scenery/spirvcrossj")
 set(CMAKE_SWIG_FLAGS -package graphics.scenery.spirvcrossj)
 
 SET_SOURCE_FILES_PROPERTIES(libspirvcrossj.i PROPERTIES CPLUSPLUS ON)

@@ -25,6 +25,7 @@ matrix:
         - cmake
         - cmake-data
         - clang-3.6
+        - gnupg2
   - os: osx
     osx_image: xcode7.3
 cache:

@@ -8,6 +8,16 @@ environment:
     secure: dWEJ6lm4P9/5FD+rmAS45A==
   CI_DEPLOY_PASSWORD:
     secure: TE0Y8Z/eW3fCFrVrJ0liFKJpYhC+HWR2yDNATU38crF8aFs7Pj2LloZ8c54+DKNu
+  CODESIGNING:
+    secure: Ky9iZmBUxU6Ae7dDFb8RLm03XrGvdVA0rYBoz7ree64=
+  GPG_KEY_NAME:
+    secure: pFZboraK8rHbi1ATX7ixxME/wkxZJzviH98ajt4zE6g=
+  GPG_PASSPHRASE:
+    secure: X/eC4bW8S7r0+vZ8KJnqu0VOLeshB8pk8h5F/2S1ArY=
+  OSSRH_USERNAME:
+    secure: q9o/GpgNFG7egrDNdcrXcv6WkC/5EepBl4DUveVpVg8=
+  OSSRH_PASSWORD:
+    secure: TuEw69O19kwhEg7g+WYO27gsVWImcnOZCmwkhy1uKsE=
 install:
   - ps: |
       Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -21,7 +31,9 @@ install:
   - cmd: mvn --version
   - cmd: java -version
   - cmd: choco install swig
-  - cmd: choco install gpg4win-vanilla
+  - cmd: choco install gpg4win-vanilla -y --force
+  - cmd: nuget install secure-file -ExcludeVersion
+  - "SET PATH=%PATH%;C:\Program Files (x86)\GNU\GnuPG"
 before_build:
   - git submodule init
   - git submodule update
@@ -34,7 +46,7 @@ build:
 after_build:
   - mvn clean package
 on_success:
-  - ps: if($env:appveyor_repo_branch -eq 'master' -and $env:appveyor_pull_request_title -eq '') { bash.exe deploy/before-deploy.sh }
+  - ps: if($env:appveyor_repo_branch -eq 'master' -and $env:appveyor_pull_request_title -eq '') { secure-file\tools\secure-file -decrypt deploy/codesigning-appveyor.asc.enc -secret %CODESIGNING% }
   - ps: if($env:appveyor_repo_branch -eq 'master' -and $env:appveyor_pull_request_title -eq '') { bash.exe deploy/deploy.sh }
 cache:
   - C:\maven

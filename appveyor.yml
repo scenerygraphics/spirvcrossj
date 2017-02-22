@@ -33,7 +33,7 @@ install:
   - cmd: choco install swig
   - cmd: choco install gpg4win-vanilla -y --force
   - cmd: nuget install secure-file -ExcludeVersion
-  - "SET PATH=%PATH%;C:\Program Files (x86)\GNU\GnuPG"
+  - cmd: SET PATH=C:\Program Files (x86)\GNU\GnuPG;%PATH%
 before_build:
   - git submodule init
   - git submodule update

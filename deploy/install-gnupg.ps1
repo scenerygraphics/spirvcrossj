@@ -1,6 +1,14 @@
-$url = "https://files.gpg4win.org/gpg4win-2.3.3.exe"
-$output = "gpg4win-2.3.3.exe"
-$shahash = "67e13c4f90ff6a70ad57bd31af64a238c9315308"
+$url = "https://github.com/scenerygraphics/spirvcrossj/releases/download/untagged-7a83f97bcbf3f87994bc/gnupg2.zip"
+$output = "gnupg2.zip"
+$shahash = "31543c90427351ea03d97e5c115c9e9dc810ad41"
+
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+function Unzip
+{
+    param([string]$zipfile, [string]$outpath)
+
+    [System.IO.Compression.ZipFile]::ExtractToDirectory($zipfile, $outpath)
+}
 
 Invoke-WebRequest -Uri $url -OutFile $output
 
@@ -8,7 +16,7 @@ $actual_hash = (Get-FileHash $output -Algorithm SHA1) | Select-Object -ExpandPro
 
 if($actual_hash -eq $shahash) {
         Write-Output "Installing gpg4win..."
-        & .\$output /S
+        Unzip .\$output "C:\gnupg2"
         Write-Output "Installation done."
         exit 0
 } else {

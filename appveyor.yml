@@ -43,8 +43,8 @@ install:
   - cmd: choco install swig
   - ps: .\deploy\install-gnupg.ps1
   - cmd: nuget install secure-file -ExcludeVersion
-  - cmd: SET PATH=C:\Program Files (x86)\GNU\GnuPG;%PATH%
-  - ps: $env:Path += ";C:\Program Files (x86)\GNU\GnuPG"
+  - cmd: SET PATH=C:\gnupg2;%PATH%
+  - ps: $env:Path += ";C:\gnupg2"
 
 before_build:
   - git submodule init
@@ -62,8 +62,8 @@ after_build:
 
 on_success:
   - cmd: SET PATH=C:\Program Files (x86)\GNU\GnuPG;%PATH%
-  - cmd: dir "C:\Program Files (x86)\GNU\GnuPG"
-  - ps: $env:Path += ";C:\Program Files (x86)\GNU\GnuPG"
+  - cmd: dir "C:\gnupg2"
+  - ps: $env:Path += ";C:\gnupg2"
   - ps: Write-Output "$env:Path"
   - ps: if($env:appveyor_repo_branch -eq 'master' -and -not (Test-Path env:appveyor_pull_request_title)) { secure-file\tools\secure-file -decrypt deploy\codesigning-appveyor.asc.enc -secret "$env:CERTIFICATE_KEY" }
   - ps: if($env:appveyor_repo_branch -eq 'master' -and -not (Test-Path env:appveyor_pull_request_title)) { gpg2 --fast-import deploy/codesigning-appveyor.asc }

@@ -20,9 +20,9 @@ environment:
     secure: TuEw69O19kwhEg7g+WYO27gsVWImcnOZCmwkhy1uKsE=
 
 artifacts:
-  - path: '**\*.jar'
+  - path: 'target\**\*.jar'
     name: JARs
-  - path: '**\*.asc'
+  - path: 'target\**\*.asc'
     name: Signatures
 
 cache:
@@ -60,5 +60,6 @@ after_build:
   - mvn clean package
 
 on_success:
-  - ps: if($env:appveyor_repo_branch -eq 'master' -and -not (Test-Path env:appveyor_pull_request_title)) { secure-file\tools\secure-file -decrypt deploy/codesigning-appveyor.asc.enc -secret %CODESIGNING% }
+  - ps: if($env:appveyor_repo_branch -eq 'master' -and -not (Test-Path env:appveyor_pull_request_title)) { secure-file\tools\secure-file -decrypt deploy\codesigning-appveyor.asc.enc -secret %CODESIGNING% }
+  - ps: if($env:appveyor_repo_branch -eq 'master' -and -not (Test-Path env:appveyor_pull_request_title)) { gpg2 --fast-import deploy/codesigning-appveyor.asc }
   - ps: if($env:appveyor_repo_branch -eq 'master' -and -not (Test-Path env:appveyor_pull_request_title)) { bash.exe deploy/deploy.sh }

@@ -62,6 +62,7 @@ after_build:
 
 on_success:
   - cmd: SET PATH=C:\Program Files (x86)\GNU\GnuPG;%PATH%
+  - cmd: dir "C:\Program Files (x86)\GNU\GnuPG"
   - ps: $env:Path += ";C:\Program Files (x86)\GNU\GnuPG"
   - ps: Write-Output "$env:Path"
   - ps: if($env:appveyor_repo_branch -eq 'master' -and -not (Test-Path env:appveyor_pull_request_title)) { secure-file\tools\secure-file -decrypt deploy\codesigning-appveyor.asc.enc -secret "$env:CERTIFICATE_KEY" }

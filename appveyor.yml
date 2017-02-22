@@ -34,10 +34,7 @@ build:
 after_build:
   - mvn clean package
 on_success:
-  - ps: |
-    if($env:appveyor_repo_branch -eq 'master' -and $env:appveyor_pull_request_title -eq '') {
-      bash.exe deploy/before-deploy.sh
-      bash.exe deploy/deploy.sh
-    }
+  - ps: if($env:appveyor_repo_branch -eq 'master' -and $env:appveyor_pull_request_title -eq '') { bash.exe deploy/before-deploy.sh }
+  - ps: if($env:appveyor_repo_branch -eq 'master' -and $env:appveyor_pull_request_title -eq '') { bash.exe deploy/deploy.sh }
 cache:
   - C:\maven

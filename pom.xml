@@ -126,7 +126,7 @@
                         <executions>
                             <execution>
                                 <goals>
-                                    <goal>deploy</goal>
+                                    <goal>exists</goal>
                                 </goals>
                             </execution>
                         </executions>

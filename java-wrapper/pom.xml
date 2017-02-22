@@ -5,7 +5,7 @@
 
     <groupId>graphics.scenery</groupId>
     <artifactId>spirvcrossj</artifactId>
-    <version>0.2.2</version>
+    <version>0.2.3-SNAPSHOT</version>
     <inceptionYear>2016</inceptionYear>
 
     <name>spirvcrossj</name>
@@ -115,6 +115,21 @@
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.honton.chas</groupId>
+                        <artifactId>exists-maven-plugin</artifactId>
+                        <version>0.0.1</version>
+                        <configuration>
+                            <property>maven.deploy.skip</property>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
 

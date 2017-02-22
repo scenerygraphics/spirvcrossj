@@ -21,6 +21,7 @@ install:
   - cmd: mvn --version
   - cmd: java -version
   - cmd: choco install swig
+  - cmd: choco install gpg4win
 before_build:
   - git submodule init
   - git submodule update

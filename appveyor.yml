@@ -33,7 +33,11 @@ build:
   project: spirvcrossj.sln
 after_build:
   - mvn clean package
-#on_success:
-#  - ps: if($env:appveyor_repo_branch -eq 'master' -and $env:appveyor_pull_request_title -eq '') { mvn clean deploy --settings settings.xml }
+on_success:
+  - ps: |
+    if($env:appveyor_repo_branch -eq 'master' -and $env:appveyor_pull_request_title -eq '') {
+      bash.exe deploy/before-deploy.sh
+      bash.exe deploy/deploy.sh
+    }
 cache:
   - C:\maven

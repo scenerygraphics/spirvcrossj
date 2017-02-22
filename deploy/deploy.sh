@@ -1,5 +1,8 @@
 #!/bin/sh
-if [ "$TRAVIS_BRANCH" != 'master' ] || [ "$TRAVIS_PULL_REQUEST" == 'true' ]; then
+
+if [ "$TRAVIS_BRANCH" == 'master' ] && [ "$TRAVIS_PULL_REQUEST" == 'false' ]; then
+    echo "Starting deploy..."
+else
     echo "Not deploying, as we are on a feature branch or PR."
     exit
 fi
@@ -26,7 +29,7 @@ if [[ "$VERSION" == *"SNAPSHOT"* ]]
 then
     echo "Configuring for SNAPSHOT deployment"
     REPOSITORY=$SNAPSHOT_REPOSITORY
-    RELEASE_OPTS="-P sign"
+    RELEASE_OPTS="-P release,sign"
 else
     echo "Configuring for release deployment"
     REPOSITORY=$RELEASE_REPOSITORY

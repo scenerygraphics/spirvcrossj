@@ -61,6 +61,9 @@ after_build:
   - mvn clean package
 
 on_success:
+  - cmd: SET PATH=C:\Program Files (x86)\GNU\GnuPG;%PATH%
+  - ps: $env:Path += ";C:\Program Files (x86)\GNU\GnuPG"
+  - ps: Write-Output "$env:Path"
   - ps: if($env:appveyor_repo_branch -eq 'master' -and -not (Test-Path env:appveyor_pull_request_title)) { secure-file\tools\secure-file -decrypt deploy\codesigning-appveyor.asc.enc -secret "$env:CERTIFICATE_KEY" }
   - ps: if($env:appveyor_repo_branch -eq 'master' -and -not (Test-Path env:appveyor_pull_request_title)) { gpg2 --fast-import deploy/codesigning-appveyor.asc }
   - ps: if($env:appveyor_repo_branch -eq 'master' -and -not (Test-Path env:appveyor_pull_request_title)) { bash.exe deploy/deploy.sh }

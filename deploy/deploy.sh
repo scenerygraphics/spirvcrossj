@@ -41,7 +41,7 @@ fi
 echo "Deploying version $VERSION with classifier $CLASSIFIER to Sonatype..."
 
 mvn $RELEASE_OPTS deploy --settings settings.xml
-mvn deploy:deploy-file -DgroupId=graphics.scenery -Dversion=$VERSION \
+mvn gpg:sign-and-deploy-file -DgroupId=graphics.scenery -Dversion=$VERSION \
 -DartifactId=spirvcrossj \
 -Dfile=target/spirvcrossj-$VERSION-$CLASSIFIER.jar \
 -DrepositoryId=$REPOSITORY_ID \

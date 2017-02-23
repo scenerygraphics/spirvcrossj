@@ -5,7 +5,7 @@
 
     <groupId>graphics.scenery</groupId>
     <artifactId>spirvcrossj</artifactId>
-    <version>0.2.4</version>
+    <version>0.2.5-SNAPSHOT</version>
     <inceptionYear>2016</inceptionYear>
 
     <name>spirvcrossj</name>

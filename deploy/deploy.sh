@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-if [ "$TRAVIS" == 'true'] && [ "$TRAVIS_BRANCH" == 'master' ] && [ "$TRAVIS_PULL_REQUEST" == 'false' ]; then
+if [ "$TRAVIS" == 'true' ] && [ "$TRAVIS_BRANCH" == 'master' ] && [ "$TRAVIS_PULL_REQUEST" == 'false' ]; then
     echo "Starting Travis deploy..."
-elif [ "$APPVEYOR" == 'true'] && [ "$APPVEYOR_REPO_BRANCH" == 'master' ] && [ "$APPVEYOR_PULL_REQUEST_TITLE" == '' ]; then
+elif [ "$APPVEYOR" == 'True' ] && [ "$APPVEYOR_REPO_BRANCH" == 'master' ] && [ "$APPVEYOR_PULL_REQUEST_TITLE" == '' ]; then
     echo "Starting Appveyor deploy..."
 else
     echo "Not deploying, as we are on a feature branch or PR."

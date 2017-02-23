@@ -61,8 +61,8 @@ after_build:
   - mvn clean package
 
 on_success:
-  - cmd: SET PATH=C:\Program Files (x86)\GNU\GnuPG;%PATH%
+  - cmd: SET PATH=C:\gnupg2;%PATH%
   - ps: $env:Path += ";C:\gnupg2"
-  - ps: if($env:appveyor_repo_branch -eq 'master' -and -not (Test-Path env:appveyor_pull_request_title)) { secure-file\tools\secure-file -decrypt deploy\codesigning-appveyor.asc.enc -secret "$env:CERTIFICATE_KEY" }
-  - ps: if($env:appveyor_repo_branch -eq 'master' -and -not (Test-Path env:appveyor_pull_request_title)) { gpg2 --fast-import deploy/codesigning-appveyor.asc 2>$null }
-  - ps: if($env:appveyor_repo_branch -eq 'master' -and -not (Test-Path env:appveyor_pull_request_title)) { bash.exe deploy/deploy.sh }
+  - cmd: if "%APPVEYOR_PULL_REQUEST_TITLE%" == "" if "%APPVEYOR_REPO_BRANCH%" == "master" secure-file\tools\secure-file -decrypt deploy\codesigning-appveyor.asc.enc -secret "%CERTIFICATE_KEY%"
+  - cmd: if "%APPVEYOR_PULL_REQUEST_TITLE%" == "" if "%APPVEYOR_REPO_BRANCH%" == "master" gpg2 --fast-import deploy/codesigning-appveyor.asc
+  - cmd: if "%APPVEYOR_PULL_REQUEST_TITLE%" == "" if "%APPVEYOR_REPO_BRANCH%" == "master" bash.exe deploy/deploy.sh

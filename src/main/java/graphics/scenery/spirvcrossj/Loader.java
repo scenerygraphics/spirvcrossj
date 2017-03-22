@@ -55,13 +55,21 @@ public class Loader {
                     }
 
                     InputStream ins = jar.getInputStream(entry);
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     FileOutputStream fos = new FileOutputStream(f);
 
-                    while (ins.available() > 0) {
-                        fos.write(ins.read());
+                    byte[] buffer = new byte[1024];
+                    int len;
+
+                    while ((len = ins.read(buffer)) > -1) {
+                        baos.write(buffer, 0, len);
                     }
 
+                    baos.flush();
+                    fos.write(baos.toByteArray());
+
                     fos.close();
+                    baos.close();
                     ins.close();
                 }
 

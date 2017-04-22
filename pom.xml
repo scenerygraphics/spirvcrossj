@@ -200,6 +200,13 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>-v</arg>
+                                <arg>--batch</arg>
+                                <arg>${env.PINENTRY_MODE}</arg>
+                            </gpgArguments>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>

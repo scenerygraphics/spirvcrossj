@@ -9,6 +9,7 @@ else
     exit
 fi
 
+ARTIFACT_ID="spirvcrossj"
 REPOSITORY_ID="ossrh"
 SNAPSHOT_REPOSITORY="https://oss.sonatype.org/content/repositories/snapshots"
 RELEASE_REPOSITORY="https://oss.sonatype.org/service/local/staging/deploy/maven2/"
@@ -42,8 +43,8 @@ echo "Deploying version $VERSION with classifier $CLASSIFIER to Sonatype..."
 
 mvn $RELEASE_OPTS deploy --settings settings.xml
 mvn gpg:sign-and-deploy-file -DgroupId=graphics.scenery -Dversion=$VERSION \
--DartifactId=spirvcrossj \
--Dfile=target/spirvcrossj-$VERSION-$CLASSIFIER.jar \
+-DartifactId=$ARTIFACT_ID \
+-Dfile=target/$ARTIFACT_ID-$VERSION-$CLASSIFIER.jar \
 -DrepositoryId=$REPOSITORY_ID \
 -Durl=$REPOSITORY \
 -Dclassifier=$CLASSIFIER -DgeneratePom=false $RELEASE_OPTS --settings settings.xml

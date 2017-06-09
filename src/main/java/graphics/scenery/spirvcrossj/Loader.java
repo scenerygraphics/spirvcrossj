@@ -43,7 +43,7 @@ public class Loader {
 
                     // only extract library files
                     String extension = entry.getName().substring(entry.getName().lastIndexOf('.') + 1);
-                    if (!(extension.startsWith("so") || extension.startsWith("dll") || extension.startsWith("dylib"))) {
+                    if (!(extension.startsWith("so") || extension.startsWith("dll") || extension.startsWith("dylib") || extension.startsWith("jnilib"))) {
                         continue;
                     }
 

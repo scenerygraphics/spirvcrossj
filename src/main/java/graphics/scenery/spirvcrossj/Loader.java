@@ -4,6 +4,8 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
@@ -34,6 +36,29 @@ public class Loader {
         return Platform.UNKNOWN;
     }
 
+    public static void cleanTempFiles() {
+        try {
+            File[] files = new File(System.getProperty("java.io.tmpdir")).listFiles();
+
+            for (File file : files) {
+                if (file.isDirectory() && file.getName().contains("spirvcrossj-natives-tmp")) {
+                    File lock = new File(file, ".lock");
+
+                    // delete the temporary directory only if the lock does not exist
+                    if (!lock.exists()) {
+                        Files.walk(file.toPath())
+                                .map(Path::toFile)
+                                .sorted((f1, f2) -> -f1.compareTo(f2))
+                                .forEach(File::delete);
+                    }
+                }
+            }
+        } catch(NullPointerException | IOException e) {
+            System.err.println("Unable to delete leftover temporary directories: " + e);
+            e.printStackTrace();
+        }
+    }
+
     public static void loadNatives() throws IOException {
         if(nativesReady) {
             return;
@@ -41,6 +66,12 @@ public class Loader {
 
         String lp = System.getProperty("java.library.path");
         File tmpDir = Files.createTempDirectory("spirvcrossj-natives-tmp").toFile();
+
+        File lock = new File(tmpDir, ".lock");
+        lock.createNewFile();
+        lock.deleteOnExit();
+
+        cleanTempFiles();
 
         String libraryName;
         String classifier;

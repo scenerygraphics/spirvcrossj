@@ -2,6 +2,7 @@ package graphics.scenery.spirvcrossj;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -17,6 +18,22 @@ public class Loader {
 
     static boolean nativesReady = false;
 
+    enum Platform { UNKNOWN, WINDOWS, LINUX, MACOS }
+
+    public static Platform getPlatform() {
+        final String os = System.getProperty("os.name").toLowerCase();
+
+        if(os.contains("win")) {
+            return Platform.WINDOWS;
+        } else if(os.contains("linux")) {
+            return Platform.LINUX;
+        } else if(os.contains("mac")) {
+            return Platform.MACOS;
+        }
+
+        return Platform.UNKNOWN;
+    }
+
     public static void loadNatives() throws IOException {
         if(nativesReady) {
             return;
@@ -25,7 +42,50 @@ public class Loader {
         String lp = System.getProperty("java.library.path");
         File tmpDir = Files.createTempDirectory("spirvcrossj-natives-tmp").toFile();
 
-        String[] jars = System.getProperty("java.class.path").split(File.pathSeparator);
+        String libraryName;
+        String classifier;
+
+        switch(getPlatform()) {
+            case WINDOWS:
+                libraryName = "spirvcrossj.dll";
+                classifier = "natives-windows";
+                break;
+            case LINUX:
+                libraryName = "libspirvcrossj.so";
+                classifier = "natives-linux";
+                break;
+            case MACOS:
+                libraryName = "libspirvcrossj.jnilib";
+                classifier = "natives-macos";
+                break;
+            default:
+                System.err.println("spirvcrossj is not supported on this platform.");
+                classifier = "none";
+                libraryName = "none";
+        }
+
+        String[] jars;
+
+        // FIXME: This incredibly ugly workaround here is needed due to the way ImageJ handles it's classpath
+        // Maybe there's a better way?
+        if(System.getProperty("java.class.path").toLowerCase().contains("imagej-launcher")) {
+            URL res = Thread.currentThread().getContextClassLoader().getResource(libraryName);
+            if(res == null && getPlatform() == Platform.MACOS) {
+                res = Thread.currentThread().getContextClassLoader().getResource("libspirvcrossj.dylib");
+            }
+
+            if(res == null) {
+                System.err.println("ERROR: Could not find spirvcrossj libraries.");
+                return;
+            }
+
+            String jar = res.getPath();
+            jar = jar.substring(jar.indexOf("file:/") + 6);
+            jar = jar.substring(0, jar.indexOf("!") - 4) + "-" + classifier + ".jar";
+            jars = jar.split(File.pathSeparator);
+        } else {
+            jars = System.getProperty("java.class.path").split(File.pathSeparator);
+        }
 
         for(int i = 0; i < jars.length; i ++) {
             String s = jars[i];

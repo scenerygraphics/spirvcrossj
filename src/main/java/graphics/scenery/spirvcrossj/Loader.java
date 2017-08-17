@@ -112,7 +112,13 @@ public class Loader {
 
             String jar = res.getPath();
             jar = jar.substring(jar.indexOf("file:/") + 6);
-            jar = jar.substring(0, jar.indexOf("!") - 4) + "-" + classifier + ".jar";
+
+            if (jar.contains(classifier)) {
+                jar = jar.substring(0, jar.indexOf("!"));
+            } else {
+                jar = jar.substring(0, jar.indexOf("!") - 4) + "-" + classifier + ".jar";
+            }
+
             jars = jar.split(File.pathSeparator);
         } else {
             jars = System.getProperty("java.class.path").split(File.pathSeparator);

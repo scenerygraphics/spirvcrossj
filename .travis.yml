@@ -35,7 +35,6 @@ install:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew unlink gnupg; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install swig gnupg2; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then alias gpg2='gpg'; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then /usr/libexec/java_home -V; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo "UPDATESTARTUPTTY" | gpg-connect-agent > /dev/null 2>&1; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then alias swig="swig3.0"; fi
@@ -56,5 +55,6 @@ after_success:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export GPG_TTY=`tty`; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then gpg-agent; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export PINENTRY_MODE="--pinentry-mode=loopback"; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then alias gpg2='gpg'; fi
 - deploy/before-deploy.sh
 - deploy/deploy.sh

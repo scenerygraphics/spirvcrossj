@@ -1,0 +1,25 @@
+diff --git a/spirv_cross.hpp b/spirv_cross.hpp
+index b43f7a9..9908356 100644
+--- a/spirv_cross.hpp
++++ b/spirv_cross.hpp
+@@ -219,7 +219,7 @@ public:
+ 	virtual size_t get_declared_struct_member_size(const SPIRType &struct_type, uint32_t index) const;
+ 
+ 	// Legacy GLSL compatibility method. Deprecated in favor of CompilerGLSL::flatten_buffer_block
+-	SPIRV_CROSS_DEPRECATED("Please use flatten_buffer_block instead.") void flatten_interface_block(uint32_t id);
++	void flatten_interface_block(uint32_t id);
+ 
+ 	// Returns a set of all global variables which are statically accessed
+ 	// by the control flow graph from the current entry point.
+diff --git a/spirv_msl.hpp b/spirv_msl.hpp
+index a7082ae..92064cd 100644
+--- a/spirv_msl.hpp
++++ b/spirv_msl.hpp
+@@ -152,7 +152,6 @@ public:
+ 
+ 	// This legacy method is deprecated.
+ 	typedef Options MSLConfiguration;
+-	SPIRV_CROSS_DEPRECATED("Please use get_options() and set_options() instead.")
+ 	std::string compile(MSLConfiguration &msl_cfg, std::vector<MSLVertexAttr> *p_vtx_attrs = nullptr,
+ 	                    std::vector<MSLResourceBinding> *p_res_bindings = nullptr);
+ 

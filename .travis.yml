@@ -44,6 +44,11 @@ install:
 - git submodule init
 - git submodule update
 script:
+- cd glslang
+- git apply ../fix_tokenizer.patch
+- cd ../SPIRV-cross
+- git apply ../spirv_common_hpp_deprecated.patch
+- cd ..
 - mkdir build
 - cd build
 - cmake ..

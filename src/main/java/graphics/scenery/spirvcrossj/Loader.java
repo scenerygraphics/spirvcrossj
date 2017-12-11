@@ -5,13 +5,9 @@ import java.lang.reflect.Field;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.stream.Collectors;
 
 /**
  * Created by ulrik on 11/14/2016.
@@ -111,7 +107,14 @@ public class Loader {
             }
 
             String jar = res.getPath();
-            jar = jar.substring(jar.indexOf("file:/") + 6);
+            // on Windows, file URLs are stated as file:///, on OSX and Linux only as file:/
+            int pathOffset = 5;
+
+            if(getPlatform() == Platform.WINDOWS) {
+                pathOffset = 6;
+            }
+
+            jar = jar.substring(jar.indexOf("file:/") + pathOffset);
 
             if (jar.contains(classifier)) {
                 jar = jar.substring(0, jar.indexOf("!"));

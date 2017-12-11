@@ -2,7 +2,6 @@
 SPIRVCROSSJ_DIR=`pwd`
 git submodule update
 cd $SPIRVCROSSJ_DIR/glslang && git apply ../fix_tokenizer.patch
-cd $SPIRVCROSSJ_DIR/SPIRV-cross && git apply ../spirv_common_hpp_deprecated.patch
 
 cd $SPIRVCROSSJ_DIR
 mkdir build

@@ -51,8 +51,6 @@ before_build:
   - git submodule update
   - cd glslang
   - git apply ../fix_tokenizer.patch
-  - cd ../SPIRV-cross
-  - git apply ../spirv_common_hpp_deprecated.patch
   - cd ..
   - cmake -G "Visual Studio 14 2015 Win64"
 

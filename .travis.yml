@@ -55,6 +55,6 @@ after_success:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export GPG_TTY=`tty`; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then gpg-agent; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export PINENTRY_MODE="--pinentry-mode=loopback"; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then alias gpg2='gpg'; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ln -s `which gpg` /usr/local/bin/gpg2; fi
 - deploy/before-deploy.sh
 - deploy/deploy.sh

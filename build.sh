@@ -1,10 +1,18 @@
-#!/bin/sh
+#!/bin/bash
+shopt -s extglob
+
 SPIRVCROSSJ_DIR=`pwd`
+JAVA_DIR="$SPIRVCROSSJ_DIR/src/main/java/graphics/scenery/spirvcrossj/"
+
+cd $JAVA_DIR
+rm -- !(Loader.java)
+cd $SPIRVCROSSJ_DIR
+
 git submodule update
 cd $SPIRVCROSSJ_DIR/glslang && git apply ../fix_tokenizer.patch
 
 cd $SPIRVCROSSJ_DIR
-mkdir build
+mkdir -p build
 rm -rf build/*
 cd build
 cmake ..

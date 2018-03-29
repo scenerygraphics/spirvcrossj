@@ -1,5 +1,9 @@
 # Java bindings for SPIRV-cross and glslang
 
+[![Linux/macOS Build Status](https://travis-ci.org/scenerygraphics/spirvcrossj.svg?branch=master)](https://travis-ci.org/scenerygraphics/spirvcrossj)
+
+[![Windows Build status](https://ci.appveyor.com/api/projects/status/6m5efeddoaqvc9b3/branch/master?svg=true)](https://ci.appveyor.com/project/skalarproduktraum/spirvcrossj/branch/master)
+
 [SPIRV-cross](https://github.com/KhronosGroup/SPIRV-cross) is a nifty library from the Khronos Group to enable GLSL shader reflection and conversion of SPIR-V binaries to different GLSL version. 
 
 [glslang](https://github.com/KhronosGroup/glslang) is the Khronos Group GLSL reference compiler and validator, providing the other direction.

@@ -56,7 +56,14 @@ mvn install
 
 ## Running the tests
 
-You can run the (at the moment) single JUnit test e.g. in Eclipse or IntelliJ after executing the steps above. The loader will pick up either the newly generated JNI libraries, or load the ones from the JAR.
+You can run the JUnit tests e.g. in Eclipse or IntelliJ after executing the steps above. The loader will pick up either the newly generated JNI libraries, or load the ones from the JAR. Alternatively, the tests can be executed via Maven, as `mvn test`.
+
+In all cases, two tests are performed:
+
+* for SPIRV-cross: converting from SPIRV to GLSL 3.10, taking a provided SPIRV binary, removing decorations and converting it back to GLSL 3.10 (`TestVulkanToGLSL.java`).
+* for glslang: taking in GLSL text files, and compiling them to SPIRV with Vulkan semantics (`TestGLSLToVulkan.java`).
+
+The input files for these tests are taken from the tests in the repositories of glslang and SPIRV-cross and are expected to compile.
 
 ## Usage
 

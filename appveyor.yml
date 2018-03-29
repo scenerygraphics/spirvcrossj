@@ -50,7 +50,10 @@ before_build:
   - git submodule init
   - git submodule update
   - cd glslang
-  - git apply ../fix_tokenizer.patch
+  - git apply ../fix-tokenizer.patch
+  - cd ..
+  - cd SPIRV-cross
+  - git apply ../fix-bitset-constructor.patch
   - cd ..
   - cmake -G "Visual Studio 14 2015 Win64"
 

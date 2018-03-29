@@ -1,5 +1,9 @@
 # Java bindings for SPIRV-cross and glslang
 
+[![Linux/macOS Build Status](https://travis-ci.org/scenerygraphics/spirvcrossj.svg?branch=master)](https://travis-ci.org/scenerygraphics/spirvcrossj)
+
+[![Windows Build status](https://ci.appveyor.com/api/projects/status/6m5efeddoaqvc9b3/branch/master?svg=true)](https://ci.appveyor.com/project/skalarproduktraum/spirvcrossj/branch/master)
+
 [SPIRV-cross](https://github.com/KhronosGroup/SPIRV-cross) is a nifty library from the Khronos Group to enable GLSL shader reflection and conversion of SPIR-V binaries to different GLSL version. 
 
 [glslang](https://github.com/KhronosGroup/glslang) is the Khronos Group GLSL reference compiler and validator, providing the other direction.
@@ -56,7 +60,14 @@ mvn install
 
 ## Running the tests
 
-You can run the (at the moment) single JUnit test e.g. in Eclipse or IntelliJ after executing the steps above. The loader will pick up either the newly generated JNI libraries, or load the ones from the JAR.
+You can run the JUnit tests e.g. in Eclipse or IntelliJ after executing the steps above. The loader will pick up either the newly generated JNI libraries, or load the ones from the JAR. Alternatively, the tests can be executed via Maven, as `mvn test`.
+
+In all cases, two tests are performed:
+
+* for SPIRV-cross: converting from SPIRV to GLSL 3.10, taking a provided SPIRV binary, removing decorations and converting it back to GLSL 3.10 (`TestVulkanToGLSL.java`).
+* for glslang: taking in GLSL text files, and compiling them to SPIRV with Vulkan semantics (`TestGLSLToVulkan.java`).
+
+The input files for these tests are taken from the tests in the repositories of glslang and SPIRV-cross and are expected to compile.
 
 ## Usage
 

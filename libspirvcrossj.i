@@ -162,6 +162,10 @@ import static graphics.scenery.spirvcrossj.EShLanguage.*;
 %naturalvar EProfile;
 %naturalvar TBuiltInResource;
 
+#ifndef SPIRV_CROSS_DEPRECATED(reason)
+#define SPIRV_CROSS_DEPRECATED(reason)
+#endif
+
 %{
     #include "spirv.hpp"
     #include "spirv_cfg.hpp"
@@ -183,6 +187,9 @@ import static graphics.scenery.spirvcrossj.EShLanguage.*;
 
     using namespace spirv_cross;
 %}
+
+%ignore spirv_cross::CompilerMSL::Options::set_msl_version;
+%ignore spirv_cross::CompilerMSL::get_options;
 
 %include "SPIRV-cross/spirv.hpp"
 %include "SPIRV-cross/spirv_cfg.hpp"
@@ -217,3 +224,4 @@ namespace std {
     %template(SpecializationConstantVec) std::vector<spirv_cross::SpecializationConstant>;
     %template(PlsRemapVec) std::vector<spirv_cross::PlsRemap>;
 }
+

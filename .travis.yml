@@ -16,12 +16,12 @@ matrix:
     addons:
       apt:
         sources:
-        - sourceline: ppa:teward/swig3.0
+        - sourceline: ppa:nschloe/swig-backports
         - sourceline: ppa:george-edison55/precise-backports
         - sourceline: ppa:ubuntu-toolchain-r/test
         - llvm-toolchain-precise-3.6
         packages:
-        - swig3.0
+        - swig
         - cmake
         - cmake-data
         - clang-3.6
@@ -45,7 +45,10 @@ install:
 - git submodule update
 script:
 - cd glslang
-- git apply ../fix_tokenizer.patch
+- git apply ../fix-tokenizer.patch
+- cd ..
+- cd SPIRV-cross
+- git apply ../fix-bitset-constructor.patch
 - cd ..
 - mkdir build
 - cd build

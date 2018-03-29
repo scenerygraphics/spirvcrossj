@@ -9,7 +9,8 @@ rm -- !(Loader.java)
 cd $SPIRVCROSSJ_DIR
 
 git submodule update
-cd $SPIRVCROSSJ_DIR/glslang && git apply ../fix_tokenizer.patch
+cd $SPIRVCROSSJ_DIR/glslang && git apply ../fix-tokenizer.patch
+cd $SPIRVCROSSJ_DIR/SPIRV-cross && git apply ../fix-bitset-constructor.patch
 
 cd $SPIRVCROSSJ_DIR
 mkdir -p build

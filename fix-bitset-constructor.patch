@@ -1,0 +1,13 @@
+diff --git a/spirv_cross.cpp b/spirv_cross.cpp
+index 73126e3..27ee53e 100644
+--- a/spirv_cross.cpp
++++ b/spirv_cross.cpp
+@@ -1161,7 +1161,7 @@ const Bitset &Compiler::get_member_decoration_bitset(uint32_t id, uint32_t index
+ 	auto &m = meta.at(id);
+ 	if (index >= m.members.size())
+ 	{
+-		static const Bitset cleared;
++		static const Bitset cleared = {};
+ 		return cleared;
+ 	}
+ 

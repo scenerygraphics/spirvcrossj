@@ -42,7 +42,7 @@ Then, under `dependencies` section, exploiting the lwjgl native `switch`:
         ..
     }
     
-Don't forget to add on top of your `build.gradle`:
+Don't forget to add at the top of your `build.gradle`:
 
 `import org.gradle.internal.os.OperatingSystem`
 

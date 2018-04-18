@@ -46,6 +46,8 @@ Don't forget to add at the top of your `build.gradle`:
 
 `import org.gradle.internal.os.OperatingSystem`
 
+You can take a look to a `build.gradle` [here](https://github.com/java-opengl-labs/Vulkan/blob/master/build.gradle)
+
 ## Building
 
 To build the wrapper, you need the following prerequisites:

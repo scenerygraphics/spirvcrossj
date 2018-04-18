@@ -10,6 +10,42 @@
 
 This repo provides a Java wrapper for both of them.
 
+# how to get it:
+
+First of all, you need to have `mavenCentral`:
+
+    repositories {
+        ..
+        mavenCentral()
+        ..
+    }
+    
+Then, under `dependencies` section, exploiting the lwjgl native `switch`:
+
+    dependencies {
+        ..
+        ext.spirvCrossVersion = "0.4.0"
+        compile "graphics.scenery:spirvcrossj:$spirvCrossVersion"
+
+        switch (OperatingSystem.current()) {
+            case OperatingSystem.WINDOWS:
+                ext.lwjglNatives = "natives-windows"
+                break
+            case OperatingSystem.LINUX:
+                ext.lwjglNatives = "natives-linux"
+                break
+            case OperatingSystem.MAC_OS:
+                ext.lwjglNatives = "natives-macos"
+                break
+        }
+        runtime "graphics.scenery:spirvcrossj:$spirvCrossVersion:$lwjglNatives"
+        ..
+    }
+    
+Don't forget to add on top of your `build.gradle`:
+
+`import org.gradle.internal.os.OperatingSystem`
+
 ## Building
 
 To build the wrapper, you need the following prerequisites:

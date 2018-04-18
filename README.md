@@ -10,7 +10,7 @@
 
 This repo provides a Java wrapper for both of them.
 
-# how to get it:
+## Gradle:
 
 First of all, you need to have `mavenCentral`:
 

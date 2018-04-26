@@ -134,8 +134,8 @@ public class TestGLSLToVulkan {
         final IntVec spirv = new IntVec();
         libspirvcrossj.glslangToSpv(program.getIntermediate(shaderType), spirv);
 
-        assert(spirv.capacity() % 4 == 0);
         System.out.println("Generated " + spirv.capacity() + " bytes of SPIRV bytecode.");
+        assert(spirv.capacity() % 4 == 0);
 
         //System.out.println(shader);
         //System.out.println(program);

@@ -20,7 +20,7 @@ public class TestGLSLToVulkan {
   public void convertGLSLToVulkan() throws IOException, URISyntaxException, InterruptedException {
     Loader.loadNatives();
 
-    BufferedReader in = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("spvFileList.txt")));
+    BufferedReader in = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("shaderFileList.txt")));
     List<String> spvFileList = in.lines().collect(Collectors.toList());
     in.close();
 

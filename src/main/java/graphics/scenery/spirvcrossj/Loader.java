@@ -95,7 +95,7 @@ public class Loader {
 
         // FIXME: This incredibly ugly workaround here is needed due to the way ImageJ handles it's classpath
         // Maybe there's a better way?
-        if(System.getProperty("java.class.path").toLowerCase().contains("imagej-launcher")) {
+        if(System.getProperty("java.class.path").toLowerCase().contains("imagej-launcher") || System.getProperty("spirvcrossj.useContextClassLoader") != null) {
             URL res = Thread.currentThread().getContextClassLoader().getResource(libraryName);
             if(res == null && getPlatform() == Platform.MACOS) {
                 res = Thread.currentThread().getContextClassLoader().getResource("libspirvcrossj.dylib");

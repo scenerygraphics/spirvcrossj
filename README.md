@@ -24,7 +24,7 @@ Then, under `dependencies` section, exploiting the lwjgl native `switch`:
 
     dependencies {
         ..
-        ext.spirvCrossVersion = "0.4.0"
+        ext.spirvCrossVersion = "0.4.1"
         compile "graphics.scenery:spirvcrossj:$spirvCrossVersion"
 
         switch (OperatingSystem.current()) {

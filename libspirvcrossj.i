@@ -190,6 +190,7 @@ import static graphics.scenery.spirvcrossj.EShLanguage.*;
 
 %ignore spirv_cross::CompilerMSL::Options::set_msl_version;
 %ignore spirv_cross::CompilerMSL::get_options;
+%ignore spirv_cross::Compiler::get_member_decoration_string;
 
 %include "SPIRV-cross/spirv.hpp"
 %include "SPIRV-cross/spirv_cfg.hpp"

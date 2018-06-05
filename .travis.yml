@@ -47,9 +47,6 @@ script:
 - cd glslang
 - git apply ../fix-tokenizer.patch
 - cd ..
-- cd SPIRV-cross
-- git apply ../fix-bitset-constructor.patch
-- cd ..
 - mkdir build
 - cd build
 - cmake ..

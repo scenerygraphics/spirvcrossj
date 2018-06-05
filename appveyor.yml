@@ -52,9 +52,6 @@ before_build:
   - cd glslang
   - git apply ../fix-tokenizer.patch
   - cd ..
-  - cd SPIRV-cross
-  - git apply ../fix-bitset-constructor.patch
-  - cd ..
   - cmake -G "Visual Studio 14 2015 Win64"
 
 build:

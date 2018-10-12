@@ -96,17 +96,30 @@ public class Loader {
         // FIXME: This incredibly ugly workaround here is needed due to the way ImageJ handles it's classpath
         // Maybe there's a better way?
         if(System.getProperty("java.class.path").toLowerCase().contains("imagej-launcher") || System.getProperty("spirvcrossj.useContextClassLoader") != null) {
-            URL res = Thread.currentThread().getContextClassLoader().getResource(libraryName);
-            if(res == null && getPlatform() == Platform.MACOS) {
-                res = Thread.currentThread().getContextClassLoader().getResource("libspirvcrossj.dylib");
+            Enumeration<URL> res = Thread.currentThread().getContextClassLoader().getResources(libraryName);
+            if(!res.hasMoreElements() && getPlatform() == Platform.MACOS) {
+                res = Thread.currentThread().getContextClassLoader().getResources("libspirvcrossj.dylib");
             }
 
-            if(res == null) {
+            if(!res.hasMoreElements()) {
                 System.err.println("ERROR: Could not find spirvcrossj libraries.");
                 return;
             }
 
-            String jar = res.getPath();
+            String jar = "";
+            while(res.hasMoreElements()) {
+                String p = res.nextElement().getPath();
+                if(p.contains("-natives-")) {
+                    jar = p;
+                    break;
+                }
+            }
+
+            if(jar.length() == 0) {
+                System.err.println("ERROR: Could not find spirvcrossj libraries.");
+                return;
+            }
+
             // on Windows, file URLs are stated as file:///, on OSX and Linux only as file:/
             int pathOffset = 5;
 

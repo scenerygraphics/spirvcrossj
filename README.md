@@ -109,4 +109,4 @@ The input files for these tests are taken from the tests in the repositories of 
 
 ## Usage
 
-See the tests in `java-wrapper/src/main/java/graphics/scenery/spirvcrossj/` for how to use the library. For both SPIRV-cross and glslang, the syntax is very similar to the original C++ version.
+See the [tests](src/test/java/graphics/scenery/spirvcrossj) for how to use the library. For both SPIRV-cross and glslang, the syntax is very similar to the original C++ version.

@@ -157,10 +157,10 @@ import static graphics.scenery.spirvcrossj.EShLanguage.*;
 %pointer_functions(int, IntPointer);
 %pointer_functions(std::string, StringPointer);
 
-%naturalvar SPIRConstant;
-%naturalvar SPIRType;
-%naturalvar EProfile;
-%naturalvar TBuiltInResource;
+
+%naturalvar spirv_cross::SPIRConstant;
+%naturalvar spirv_cross::EProfile;
+%naturalvar spirv_cross::TBuiltInResource;
 
 #ifndef SPIRV_CROSS_DEPRECATED(reason)
 #define SPIRV_CROSS_DEPRECATED(reason)
@@ -191,8 +191,14 @@ import static graphics.scenery.spirvcrossj.EShLanguage.*;
 %ignore spirv_cross::CompilerMSL::Options::set_msl_version;
 %ignore spirv_cross::CompilerMSL::get_options;
 %ignore spirv_cross::Compiler::get_member_decoration_string;
+%ignore spirv_cross::SPIRAccessChain;
+%ignore spirv_cross::SPIRBlock;
+%ignore spirv_cross::IVariant;
+%ignore spirv_cross::Variant;
+%ignore spirv_cross::Meta;
 
 %include "SPIRV-cross/spirv.hpp"
+%include "SPIRV-cross/spirv_common.hpp"
 %include "SPIRV-cross/spirv_cfg.hpp"
 %include "SPIRV-cross/spirv_cross.hpp"
 %include "SPIRV-cross/spirv_glsl.hpp"
@@ -225,4 +231,3 @@ namespace std {
     %template(SpecializationConstantVec) std::vector<spirv_cross::SpecializationConstant>;
     %template(PlsRemapVec) std::vector<spirv_cross::PlsRemap>;
 }
-

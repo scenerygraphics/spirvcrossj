@@ -69,7 +69,11 @@ public class TestVulkanToGLSL {
 
       ShaderResources res = compiler.getShaderResources();
       for (int i = 0; i < res.getUniformBuffers().capacity(); i++) {
-        System.err.println(res.getUniformBuffers().get(i).getName());
+        System.err.println(compiler.getType(res.getUniformBuffers().get(i).getTypeId()).getBasetype() + ": " + res.getUniformBuffers().get(i).getName());
+      }
+
+      for (int i = 0; i < res.getSampledImages().capacity(); i++) {
+        System.err.println(compiler.getType(res.getSampledImages().get(i).getTypeId()).getBasetype() + ": " + res.getSampledImages().get(i).getName());
       }
     }
   }

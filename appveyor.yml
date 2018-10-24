@@ -51,6 +51,7 @@ before_build:
   - git submodule update
   - cd glslang
   - git apply ../fix-tokenizer.patch
+  - python ./update_glslang_sources.py
   - cd ..
   - cmake -G "Visual Studio 14 2015 Win64"
 
@@ -58,6 +59,7 @@ build:
   project: spirvcrossj.sln
 
 after_build:
+  - bash post-build.sh
   - mvn clean package
 
 on_success:

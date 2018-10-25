@@ -19,6 +19,7 @@ echo "Using find ($FIND_CMD) on $unameOut."
 echo "Patching wrapped classes..."
 cd $JAVA_DIR
 $FIND_CMD . -type f -name '*.java' -exec sed -i".bak" 's/spirv_cross::/Types./g' {} \;
+rm $JAVA_DIR/*.bak
 cd $SPIRVCROSSJ_DIR
 
 echo "Continueing build..."

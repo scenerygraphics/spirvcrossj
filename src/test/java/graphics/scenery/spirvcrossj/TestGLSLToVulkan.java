@@ -30,8 +30,6 @@ public class TestGLSLToVulkan {
 
     final SWIGTYPE_p_TBuiltInResource resources = libspirvcrossj.getDefaultTBuiltInResource();
 
-    System.err.println("Waiting for debugger...");
-
     for (String filename : spvFileList) {
 
       Boolean compileFail = false;

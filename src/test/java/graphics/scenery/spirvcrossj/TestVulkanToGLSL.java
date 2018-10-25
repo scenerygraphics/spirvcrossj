@@ -1,6 +1,7 @@
 package graphics.scenery.spirvcrossj;
 
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -69,7 +70,35 @@ public class TestVulkanToGLSL {
 
       ShaderResources res = compiler.getShaderResources();
       for (int i = 0; i < res.getUniformBuffers().capacity(); i++) {
-        System.err.println(res.getUniformBuffers().get(i).getName());
+        System.err.println(compiler.getType(res.getUniformBuffers().get(i).getTypeId()).getBasetype() + ": " + res.getUniformBuffers().get(i).getName());
+      }
+
+      for (int i = 0; i < res.getSampledImages().capacity(); i++) {
+        System.err.println(compiler.getType(res.getSampledImages().get(i).getTypeId()).getBasetype() + ": " + res.getSampledImages().get(i).getName());
+      }
+    }
+  }
+
+  @Test(expected=RuntimeException.class) public void checkExceptionHandling() throws IOException, URISyntaxException {
+    BufferedReader in = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("spvFileList.txt")));
+    List<String> spvFileList = in.lines().collect(Collectors.toList());
+    in.close();
+
+    for(String filename: spvFileList) {
+      ByteBuffer data = ByteBuffer.wrap(Files.readAllBytes(Paths.get(TestVulkanToGLSL.class.getResource(filename).toURI())));
+      IntVec spirv = new IntVec();
+      IntBuffer ib = data.asIntBuffer();
+
+      while (ib.hasRemaining()) {
+        spirv.pushBack(ib.get());
+      }
+
+      CompilerGLSL compiler = new CompilerGLSL(spirv);
+
+      ShaderResources res = compiler.getShaderResources();
+      for (int i = 0; i < res.getUniformBuffers().capacity(); i++) {
+        // throws a CompilerError
+        compiler.getType(res.getUniformBuffers().get(i).getId());
       }
     }
   }

@@ -1,12 +1,14 @@
 %module libspirvcrossj
 
 %include "typemaps.i"
+%include "std_except.i"
 %include "std_vector.i"
 %include "stdint.i"
 %include "std_string.i"
 %include "enumtypeunsafe.swg"
 %include "cpointer.i"
 %include "arrays_java.i"
+%include "exception.i"
 
 %javaconst(1);
 
@@ -157,16 +159,45 @@ import static graphics.scenery.spirvcrossj.EShLanguage.*;
 %pointer_functions(int, IntPointer);
 %pointer_functions(std::string, StringPointer);
 
-%naturalvar SPIRConstant;
-%naturalvar SPIRType;
-%naturalvar EProfile;
-%naturalvar TBuiltInResource;
+
+%naturalvar spirv_cross::SPIRConstant;
+%naturalvar spirv_cross::EProfile;
+%naturalvar spirv_cross::TBuiltInResource;
 
 #ifndef SPIRV_CROSS_DEPRECATED(reason)
 #define SPIRV_CROSS_DEPRECATED(reason)
 #endif
 
+
+// exception handling for SPIRV-cross
+
+namespace std 
+{
+  %ignore runtime_error;
+  struct runtime_error {};
+}
+
+// Allow C++ exceptions to be handled in Java
+%typemap(throws, throws="java.lang.Exception") spirv_cross::CompilerError {
+  jclass excep = jenv->FindClass("java/lang/Exception");
+  if (excep)
+    jenv->ThrowNew(excep, $1.what());
+  return $null;
+}
+
+// Force the CompilerError Java class to extend java.lang.Exception
+%typemap(javabase) spirv_cross::CompilerError "java.lang.Exception";
+
+%exception {
+  try {
+      $action
+  } catch(spirv_cross::CompilerError) {
+      SWIG_exception(SWIG_RuntimeError, "SPIRV-cross compiler error in $decl");
+  }
+}
+
 %{
+    #include <stdexcept>
     #include "spirv.hpp"
     #include "spirv_cfg.hpp"
     #include "spirv_cross.hpp"
@@ -191,8 +222,14 @@ import static graphics.scenery.spirvcrossj.EShLanguage.*;
 %ignore spirv_cross::CompilerMSL::Options::set_msl_version;
 %ignore spirv_cross::CompilerMSL::get_options;
 %ignore spirv_cross::Compiler::get_member_decoration_string;
+%ignore spirv_cross::SPIRAccessChain;
+%ignore spirv_cross::SPIRBlock;
+%ignore spirv_cross::IVariant;
+%ignore spirv_cross::Variant;
+%ignore spirv_cross::Meta;
 
 %include "SPIRV-cross/spirv.hpp"
+%include "SPIRV-cross/spirv_common.hpp"
 %include "SPIRV-cross/spirv_cfg.hpp"
 %include "SPIRV-cross/spirv_cross.hpp"
 %include "SPIRV-cross/spirv_glsl.hpp"
@@ -225,4 +262,3 @@ namespace std {
     %template(SpecializationConstantVec) std::vector<spirv_cross::SpecializationConstant>;
     %template(PlsRemapVec) std::vector<spirv_cross::PlsRemap>;
 }
-

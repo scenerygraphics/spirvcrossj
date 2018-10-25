@@ -1,12 +1,14 @@
 %module libspirvcrossj
 
 %include "typemaps.i"
+%include "std_except.i"
 %include "std_vector.i"
 %include "stdint.i"
 %include "std_string.i"
 %include "enumtypeunsafe.swg"
 %include "cpointer.i"
 %include "arrays_java.i"
+%include "exception.i"
 
 %javaconst(1);
 
@@ -166,7 +168,36 @@ import static graphics.scenery.spirvcrossj.EShLanguage.*;
 #define SPIRV_CROSS_DEPRECATED(reason)
 #endif
 
+
+// exception handling for SPIRV-cross
+
+namespace std 
+{
+  %ignore runtime_error;
+  struct runtime_error {};
+}
+
+// Allow C++ exceptions to be handled in Java
+%typemap(throws, throws="java.lang.Exception") spirv_cross::CompilerError {
+  jclass excep = jenv->FindClass("java/lang/Exception");
+  if (excep)
+    jenv->ThrowNew(excep, $1.what());
+  return $null;
+}
+
+// Force the CompilerError Java class to extend java.lang.Exception
+%typemap(javabase) spirv_cross::CompilerError "java.lang.Exception";
+
+%exception {
+  try {
+      $action
+  } catch(spirv_cross::CompilerError) {
+      SWIG_exception(SWIG_RuntimeError, "SPIRV-cross compiler error in $decl");
+  }
+}
+
 %{
+    #include <stdexcept>
     #include "spirv.hpp"
     #include "spirv_cfg.hpp"
     #include "spirv_cross.hpp"

@@ -102,11 +102,11 @@ You can run the JUnit tests e.g. in Eclipse or IntelliJ after executing the step
 
 In all cases, two tests are performed:
 
-* for SPIRV-cross: converting from SPIRV to GLSL 3.10, taking a provided SPIRV binary, removing decorations and converting it back to GLSL 3.10 (`TestVulkanToGLSL.java`).
-* for glslang: taking in GLSL text files, and compiling them to SPIRV with Vulkan semantics (`TestGLSLToVulkan.java`).
+* for SPIRV-cross: converting from SPIRV to GLSL 3.10, taking a provided SPIRV binary, removing decorations and converting it back to GLSL 3.10 ([`TestVulkanToGLSL.java`](src/test/java/graphics/scenery/spirvcrossj/TestVulkanToGLSL.java)).
+* for glslang: taking in GLSL text files, and compiling them to SPIRV with Vulkan semantics ([`TestGLSLToVulkan.java`](src/test/java/graphics/scenery/spirvcrossj/TestGLSLToVulkan.java)).
 
 The input files for these tests are taken from the tests in the repositories of glslang and SPIRV-cross and are expected to compile.
 
 ## Usage
 
-See the tests in `java-wrapper/src/main/java/graphics/scenery/spirvcrossj/` for how to use the library. For both SPIRV-cross and glslang, the syntax is very similar to the original C++ version.
+See the [tests](src/test/java/graphics/scenery/spirvcrossj) for how to use the library. For both SPIRV-cross and glslang, the syntax is very similar to the original C++ version.

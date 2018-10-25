@@ -8,8 +8,9 @@ unameOut="$(uname -s)"
 case "${unameOut}" in
     Linux*)     FIND_CMD=find;;
     Darwin*)    FIND_CMD=find;;
-    CYGWIN*)    FIND_CMD=find;;
+    CYGWIN*)    FIND_CMD=/bin/find;;
     MINGW*)     FIND_CMD=/bin/find;;
+    MSYS*)      FIND_CMD=/bin/find;;
     *)          FIND_CMD=find
 esac
 

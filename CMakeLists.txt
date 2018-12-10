@@ -45,6 +45,10 @@ SWIG_ADD_MODULE(spirvcrossj java libspirvcrossj.i
     ${SPIRVCROSS_DIR}/GLSL.std.450.h
 	${SPIRVCROSS_DIR}/spirv_cross.cpp
 	${SPIRVCROSS_DIR}/spirv_glsl.cpp
+	${SPIRVCROSS_DIR}/spirv_cross_parsed_ir.cpp
+	${SPIRVCROSS_DIR}/spirv_cross_util.cpp
+	${SPIRVCROSS_DIR}/spirv_reflect.cpp
+	${SPIRVCROSS_DIR}/spirv_parser.cpp
 	${SPIRVCROSS_DIR}/spirv_cpp.cpp
 	${SPIRVCROSS_DIR}/spirv_msl.cpp
 	${SPIRVCROSS_DIR}/spirv_cfg.cpp

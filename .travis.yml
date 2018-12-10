@@ -49,11 +49,11 @@ script:
 - git apply ../fix-tokenizer.patch
 - python ./update_glslang_sources.py
 - cd ..
-- mkdir target/build
+- mkdir -p target/build
 - cd target/build
-- cmake ..
+- cmake ../..
 - cmake --build .
-- cd ..
+- cd ../..
 - ./post-build.sh
 - mvn package
 after_success:

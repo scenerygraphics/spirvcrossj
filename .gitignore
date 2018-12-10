@@ -8,8 +8,3 @@ target/
 # also ignore SWIG-generated classes and binaries
 src/main/java/graphics/scenery/spirvcrossj/*.java
 src/main/java/graphics/scenery/spirvcrossj/*.cxx
-src/natives/*.jnilib
-src/natives/*.dll
-src/natives/*.so
-src/natives/*.dylib
-src/natives/*.pdb

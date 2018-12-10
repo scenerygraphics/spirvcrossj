@@ -100,32 +100,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.honton.chas</groupId>
-                        <artifactId>exists-maven-plugin</artifactId>
-                        <version>0.0.1</version>
-                        <configuration>
-                            <property>maven.deploy.skip</property>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>exists</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
                 </plugins>
 
                 <resources>
@@ -202,6 +176,32 @@
                                 <arg>${env.PINENTRY_MODE}</arg>
                             </gpgArguments>
                         </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.honton.chas</groupId>
+                        <artifactId>exists-maven-plugin</artifactId>
+                        <version>0.0.1</version>
+                        <configuration>
+                            <property>maven.deploy.skip</property>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>exists</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

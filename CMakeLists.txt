@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8)
 project(SPIRVCrossj)
 enable_testing()
 
+set(default_build_type, "Release")
+
 FIND_PACKAGE(SWIG 3.0 REQUIRED)
 INCLUDE(${SWIG_USE_FILE})
 

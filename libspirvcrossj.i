@@ -221,6 +221,7 @@ namespace std
     #include "SPVRemapper.h"
 
     using namespace spirv_cross;
+    using namespace spirv_cross::ParserIR;
     using namespace glslang;
 %}
 

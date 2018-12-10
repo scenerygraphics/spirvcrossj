@@ -21,9 +21,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <scijava.jvm.version>1.8</scijava.jvm.version>
-        <license.licenseName>BSD</license.licenseName>
-        <license.copyrightOwners>Ulrik Guenther, MPI-CBG</license.copyrightOwners>
     </properties>
 
     <developers>
@@ -39,10 +36,6 @@
             <timezone>+1</timezone>
         </developer>
     </developers>
-
-    <contributors></contributors>
-
-    <mailingLists></mailingLists>
 
     <scm>
         <connection>scm:git:git://github.com/skalarproduktraum/spirvcrossj</connection>

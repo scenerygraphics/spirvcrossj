@@ -52,7 +52,7 @@ script:
 - mkdir -p target/build
 - cd target/build
 - cmake ../..
-- cmake --build .
+- cmake --build . -- -j4
 - cd ../..
 - ./post-build.sh
 - mvn package

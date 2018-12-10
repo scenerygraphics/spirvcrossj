@@ -217,6 +217,7 @@ namespace std
     #include "SPVRemapper.h"
 
     using namespace spirv_cross;
+    using namespace glslang;
 %}
 
 %ignore spirv_cross::CompilerMSL::Options::set_msl_version;

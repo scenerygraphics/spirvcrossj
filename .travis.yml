@@ -44,6 +44,7 @@ install:
 - git submodule init
 - git submodule update
 script:
+- export CMAKE_BUILD_PARALLEL_LEVEL=4
 - cd glslang
 - git apply ../fix-tokenizer.patch
 - python ./update_glslang_sources.py

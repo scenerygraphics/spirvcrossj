@@ -47,7 +47,7 @@ install:
   - ps: $env:Path += ";C:\gnupg2"
 
 before_build:
-  - mkdir -p target/classes
+  - mkdir target\classes
   - git submodule init
   - git submodule update
   - cd glslang

@@ -48,8 +48,8 @@ script:
 - git apply ../fix-tokenizer.patch
 - python ./update_glslang_sources.py
 - cd ..
-- mkdir build
-- cd build
+- mkdir target/build
+- cd target/build
 - cmake ..
 - cmake --build .
 - cd ..

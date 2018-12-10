@@ -17,12 +17,13 @@ python ./update_glslang_sources.py
 echo "Building now ..."
 
 cd $SPIRVCROSSJ_DIR
-mkdir -p build
-rm -rf build/*
-cd build
-cmake ..
+mvn clean
+mkdir -p target/build
+rm -rf target/build/*
+cd target/build
+cmake ../..
 cmake --build .
 
 cd $SPIRVCROSSJ_DIR
 ./post-build.sh
-mvn clean package
+mvn package

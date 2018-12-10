@@ -194,7 +194,7 @@ public class Loader {
         }
 
         lp = System.getProperty("java.library.path");
-        System.setProperty("java.library.path", lp + File.pathSeparator + new java.io.File( "." ).getCanonicalPath() + File.separator + "src" + File.separator + "natives");
+        System.setProperty("java.library.path", lp + File.pathSeparator + new java.io.File( "." ).getCanonicalPath() + File.separator + "target" + File.separator + "classes");
 
         try {
             Field fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");

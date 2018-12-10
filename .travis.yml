@@ -11,20 +11,16 @@ env:
 matrix:
   include:
   - os: linux
-    jdk: oraclejdk8
+    dist: xenial
+    jdk: openjdk8
     sudo: false
     addons:
       apt:
-        sources:
-        - sourceline: ppa:nschloe/swig-backports
-        - sourceline: ppa:george-edison55/precise-backports
-        - sourceline: ppa:ubuntu-toolchain-r/test
-        - llvm-toolchain-precise-3.6
         packages:
         - swig
         - cmake
         - cmake-data
-        - clang-3.6
+        - clang-3.8
         - gnupg2
   - os: osx
     osx_image: xcode7.3
@@ -38,9 +34,9 @@ install:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then /usr/libexec/java_home -V; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo "UPDATESTARTUPTTY" | gpg-connect-agent > /dev/null 2>&1; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then alias swig="swig3.0"; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export COMPILER=clang++-3.6; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX=clang++-3.6; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CC=clang-3.6; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export COMPILER=clang++-3.8; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX=clang++-3.8; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CC=clang-3.8; fi
 - git submodule init
 - git submodule update
 script:

@@ -2,13 +2,15 @@ cmake_minimum_required(VERSION 2.8)
 project(SPIRVCrossj)
 enable_testing()
 
+set(default_build_type, "Release")
+
 FIND_PACKAGE(SWIG 3.0 REQUIRED)
 INCLUDE(${SWIG_USE_FILE})
 
 FIND_PACKAGE(JNI REQUIRED)
 FIND_PACKAGE (Threads REQUIRED)
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/natives")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/target/classes")
 
 
 if(${CMAKE_GENERATOR} MATCHES "Makefile")

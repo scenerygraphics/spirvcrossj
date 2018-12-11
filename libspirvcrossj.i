@@ -201,10 +201,14 @@ namespace std
     #include "spirv.hpp"
     #include "spirv_cfg.hpp"
     #include "spirv_cross.hpp"
+    #include "spirv_cross_util.hpp"
+    #include "spirv_parser.hpp"
+    #include "spirv_cross_parsed_ir.hpp"
     #include "spirv_common.hpp"
     #include "spirv_glsl.hpp"
     #include "spirv_cpp.hpp"
     #include "spirv_msl.hpp"
+    #include "spirv_reflect.hpp"
 
     #include "ShHandle.h" 
     #include "revision.h" 
@@ -217,6 +221,7 @@ namespace std
     #include "SPVRemapper.h"
 
     using namespace spirv_cross;
+    using namespace glslang;
 %}
 
 %ignore spirv_cross::CompilerMSL::Options::set_msl_version;
@@ -228,13 +233,28 @@ namespace std
 %ignore spirv_cross::Variant;
 %ignore spirv_cross::Meta;
 
+%ignore spirv_cross::SPIRConstantOp::clone;
+%ignore spirv_cross::SPIRUndef::clone;
+%ignore spirv_cross::SPIRExtension::clone;
+%ignore spirv_cross::SPIRExpression::clone;
+%ignore spirv_cross::SPIRFunction::clone;
+%ignore spirv_cross::SPIRFunctionPrototype::clone;
+%ignore spirv_cross::SPIRConstant::clone;
+%ignore spirv_cross::SPIRVariable::clone;
+%ignore spirv_cross::SPIRCombinedImageSampler::clone;
+%ignore spirv_cross::SPIRType::clone;
+
 %include "SPIRV-cross/spirv.hpp"
 %include "SPIRV-cross/spirv_common.hpp"
 %include "SPIRV-cross/spirv_cfg.hpp"
 %include "SPIRV-cross/spirv_cross.hpp"
+%include "SPIRV-cross/spirv_cross_util.hpp"
 %include "SPIRV-cross/spirv_glsl.hpp"
 %include "SPIRV-cross/spirv_cpp.hpp"
+%include "SPIRV-cross/spirv_parser.hpp"
+%include "SPIRV-cross/spirv_cross_parsed_ir.hpp"
 %include "SPIRV-cross/spirv_msl.hpp"
+%include "SPIRV-cross/spirv_reflect.hpp"
 
 // glslang
 %include "glslang/glslang/Include/ShHandle.h" 

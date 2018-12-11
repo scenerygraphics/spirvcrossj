@@ -60,7 +60,7 @@ script:
 - ./post-build.sh
 - mvn package
 after_success:
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then echo "allow-loopback-pinentry" > ~/.gpg-agent.conf; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf; fi
 - killall -9 gpg-agent
 - export GPG_TTY=`tty`
 - gpg-agent

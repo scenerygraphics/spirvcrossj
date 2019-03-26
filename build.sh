@@ -21,7 +21,7 @@ mvn clean
 mkdir -p target/build
 rm -rf target/build/*
 cd target/build
-cmake ../..
+cmake -DCMAKE_BUILD_TYPE=Release ../..
 cmake --build .
 
 cd $SPIRVCROSSJ_DIR

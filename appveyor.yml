@@ -54,7 +54,7 @@ before_build:
   - git apply ../fix-tokenizer.patch
   - python ./update_glslang_sources.py
   - cd ..
-  - cmake -G "Visual Studio 14 2015 Win64"
+  - cmake -G "Visual Studio 14 2015 Win64" .
 
 build:
   parallel: true

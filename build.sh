@@ -17,7 +17,7 @@ python ./update_glslang_sources.py
 echo "Building now ..."
 
 cd $SPIRVCROSSJ_DIR
-mvn clean
+mvn -B clean
 mkdir -p target/build
 rm -rf target/build/*
 cd target/build
@@ -26,4 +26,4 @@ cmake --build .
 
 cd $SPIRVCROSSJ_DIR
 ./post-build.sh
-mvn package
+mvn -B package

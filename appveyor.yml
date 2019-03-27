@@ -62,7 +62,7 @@ build:
 
 after_build:
   - bash post-build.sh
-  - mvn package
+  - mvn -B package
 
 on_success:
   - cmd: SET PATH=C:\gnupg2;%PATH%

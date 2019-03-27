@@ -41,8 +41,8 @@ fi
 
 echo "Deploying version $VERSION with classifier $CLASSIFIER to Sonatype..."
 
-mvn $RELEASE_OPTS deploy --settings settings.xml
-mvn gpg:sign-and-deploy-file -DgroupId=graphics.scenery -Dversion=$VERSION \
+mvn -B $RELEASE_OPTS deploy --settings settings.xml
+mvn -B gpg:sign-and-deploy-file -DgroupId=graphics.scenery -Dversion=$VERSION \
 -DartifactId=$ARTIFACT_ID \
 -Dfile=target/$ARTIFACT_ID-$VERSION-$CLASSIFIER.jar \
 -DrepositoryId=$REPOSITORY_ID \

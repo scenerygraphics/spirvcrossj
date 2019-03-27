@@ -57,7 +57,7 @@ Finally, add the following dependencies:
 <dependency>
     <groupId>graphics.scenery</groupId>
     <artifactId>spirvcrossj</artifactId>
-    <version>0.5.0-1.1.85</version>
+    <version>0.5.2-1.1.101.0</version>
 </dependency>
 
 <dependency>

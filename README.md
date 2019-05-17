@@ -45,7 +45,7 @@ In the `profiles` section of your `pom.xml`, add the following profiles:
         </os>
     </activation>
     <properties>
-        <spirvcrossj.natives>natives-windows</lwjgl.spirvcrossj>
+        <spirvcrossj.natives>natives-windows</spirvcrossj.natives>
     </properties>
 </profile>
 ```

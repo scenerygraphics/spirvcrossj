@@ -168,6 +168,10 @@ import static graphics.scenery.spirvcrossj.EShLanguage.*;
 #define SPIRV_CROSS_DEPRECATED(reason)
 #endif
 
+#ifndef SPIRV_CROSS_NOEXCEPT
+#define SPIRV_CROSS_NOEXCEPT noexcept
+#endif
+
 
 // exception handling for SPIRV-cross
 
@@ -232,6 +236,8 @@ namespace std
 %ignore spirv_cross::IVariant;
 %ignore spirv_cross::Variant;
 %ignore spirv_cross::Meta;
+%ignore spirv_cross::ObjectPoolGroup;
+%ignore spirv_cross::ParsedIR;
 
 %ignore spirv_cross::SPIRConstantOp::clone;
 %ignore spirv_cross::SPIRUndef::clone;

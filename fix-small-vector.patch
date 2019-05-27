@@ -1,0 +1,13 @@
+diff --git a/spirv_cross_containers.hpp b/spirv_cross_containers.hpp
+index 11cb3719..62d713b5 100644
+--- a/spirv_cross_containers.hpp
++++ b/spirv_cross_containers.hpp
+@@ -156,7 +156,7 @@ public:
+ 	}
+ 
+ 	// Makes it easier to consume SmallVector.
+-#if defined(_MSC_VER) && _MSC_VER < 1900
++#if (defined(_MSC_VER) && _MSC_VER < 1900) || defined(SWIG)
+ 	explicit operator std::vector<T>() const
+ 	{
+ 		// Another MSVC 2013 workaround. It does not understand lvalue/rvalue qualified operations.

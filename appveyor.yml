@@ -2,6 +2,7 @@ clone_depth: 10
 platform: x64
 configuration: Release
 environment:
+  MAVEN_VERSION: 3.6.1
   matrix:
     - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
   CI_DEPLOY_USERNAME:
@@ -26,13 +27,16 @@ artifacts:
     name: Signatures
 
 cache:
-  - C:\maven
+  - C:\maven -> appveyor.yml
+  - C:\Users\appveyor\.m2\ -> pom.xml
 
 install:
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-http-proxy.ps1'))
+  - ps: .\appveyor-maven-proxy.ps1
   - ps: |
       Add-Type -AssemblyName System.IO.Compression.FileSystem
       if (!(Test-Path -Path "C:\maven" )) {
-        (new-object System.Net.WebClient).DownloadFile('https://repo1.maven.org/maven2/org/apache/maven/apache-maven/3.3.9/apache-maven-3.3.9-bin.zip', 'C:\maven-bin.zip')
+        (new-object System.Net.WebClient).DownloadFile("https://repo1.maven.org/maven2/org/apache/maven/apache-maven/$env:MAVEN_VERSION/apache-maven-$env:MAVEN_VERSION-bin.zip", 'C:\maven-bin.zip')
         [System.IO.Compression.ZipFile]::ExtractToDirectory("C:\maven-bin.zip", "C:\maven")
       }
   - cmd: SET PATH=C:\maven\apache-maven-3.3.9\bin;%JAVA_HOME%\bin;%PATH%
@@ -53,6 +57,8 @@ before_build:
   - cd glslang
   - git apply ../fix-tokenizer.patch
   - python ./update_glslang_sources.py
+  - cd ../SPIRV-cross
+  - git apply ../fix-small-vector.patch
   - cd ..
   - cmake -G "Visual Studio 14 2015 Win64" .
 

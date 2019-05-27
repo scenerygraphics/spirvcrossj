@@ -1,7 +1,6 @@
 package graphics.scenery.spirvcrossj;
 
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,7 +33,7 @@ public class TestVulkanToGLSL {
     IntBuffer ib = data.asIntBuffer();
 
     while(ib.hasRemaining()) {
-      spirv.pushBack(ib.get());
+      spirv.add((long)ib.get());
     }
 
     System.out.println("Read " + ib.position() + " opcodes from SPIR-V binary.\n");
@@ -44,7 +43,7 @@ public class TestVulkanToGLSL {
     options.setVersion(310);
     options.setEs(false);
 
-    compiler.setOptions(options);
+    compiler.setCommonOptions(options);
 
     // output GLSL 3.10 code
     System.out.println("SPIR-V converted to GLSL 3.10:\n\n" + compiler.compile());
@@ -61,7 +60,7 @@ public class TestVulkanToGLSL {
       IntBuffer ib = data.asIntBuffer();
 
       while (ib.hasRemaining()) {
-        spirv.pushBack(ib.get());
+        spirv.add((long)ib.get());
       }
 
       System.out.println("Read " + ib.position() + " opcodes from SPIR-V binary " + filename + ".\n");
@@ -90,7 +89,7 @@ public class TestVulkanToGLSL {
       IntBuffer ib = data.asIntBuffer();
 
       while (ib.hasRemaining()) {
-        spirv.pushBack(ib.get());
+        spirv.add((long)ib.get());
       }
 
       CompilerGLSL compiler = new CompilerGLSL(spirv);

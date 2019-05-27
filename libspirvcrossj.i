@@ -10,7 +10,7 @@
 %include "arrays_java.i"
 %include "exception.i"
 
-%javaconst(1);
+//%javaconst(1);
 
 %typemap(javaimports) EShLanguageMask %{
 import static graphics.scenery.spirvcrossj.EShLanguage.*;

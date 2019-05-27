@@ -33,7 +33,7 @@ public class TestVulkanToGLSL {
     IntBuffer ib = data.asIntBuffer();
 
     while(ib.hasRemaining()) {
-      spirv.pushBack(ib.get());
+      spirv.add((long)ib.get());
     }
 
     System.out.println("Read " + ib.position() + " opcodes from SPIR-V binary.\n");
@@ -60,7 +60,7 @@ public class TestVulkanToGLSL {
       IntBuffer ib = data.asIntBuffer();
 
       while (ib.hasRemaining()) {
-        spirv.pushBack(ib.get());
+        spirv.add((long)ib.get());
       }
 
       System.out.println("Read " + ib.position() + " opcodes from SPIR-V binary " + filename + ".\n");
@@ -89,7 +89,7 @@ public class TestVulkanToGLSL {
       IntBuffer ib = data.asIntBuffer();
 
       while (ib.hasRemaining()) {
-        spirv.pushBack(ib.get());
+        spirv.add((long)ib.get());
       }
 
       CompilerGLSL compiler = new CompilerGLSL(spirv);

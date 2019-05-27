@@ -53,6 +53,8 @@ before_build:
   - cd glslang
   - git apply ../fix-tokenizer.patch
   - python ./update_glslang_sources.py
+  - cd ../SPIRV-cross
+  - git apply ../fix-small-vector.patch
   - cd ..
   - cmake -G "Visual Studio 14 2015 Win64" .
 

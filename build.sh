@@ -14,6 +14,8 @@ git submodule update
 cd $SPIRVCROSSJ_DIR/glslang && git apply ../fix-tokenizer.patch
 python ./update_glslang_sources.py
 
+cd $SPIRVCROSSJ_DIR/SPIRV-cross && git apply ../fix-small-vector.patch
+
 echo "Building now ..."
 
 cd $SPIRVCROSSJ_DIR

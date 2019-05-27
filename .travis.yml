@@ -52,13 +52,16 @@ script:
 - git apply ../fix-tokenizer.patch
 - python ./update_glslang_sources.py
 - cd ..
+- cd SPIRV-cross
+- git apply ../fix-small-vector.patch
+- cd ..
 - mkdir -p target/build
 - cd target/build
 - cmake ../..
 - cmake --build . -- -j4
 - cd ../..
 - ./post-build.sh
-- mvn package
+- mvn -B package
 after_success:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf; fi
 - killall -9 gpg-agent

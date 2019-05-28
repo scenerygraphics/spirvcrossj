@@ -294,12 +294,15 @@ using namespace spirv_cross;
 
 %template(StringVec) std::vector<std::string>;
 %template(IntVec) std::vector<uint32_t>;
+%template(UInt8Vec) std::vector<uint8_t>;
+%template(IntSmallVec) spirv_cross::SmallVector<uint32_t>;
+%template(UInt8SmallVec) spirv_cross::SmallVector<uint8_t>;
 %template(ResourceVec) spirv_cross::SmallVector<spirv_cross::Resource>;
 %template(ResourceVectorView) spirv_cross::VectorView<spirv_cross::Resource>;
-%template(BufferRangeVec) std::vector<spirv_cross::BufferRange>;
-%template(CombinedImageSamplerVec) std::vector<spirv_cross::CombinedImageSampler>;
-%template(MSLResourceBindingVec) std::vector<spirv_cross::MSLResourceBinding>;
-%template(MSLVertexAttrVec) std::vector<spirv_cross::MSLVertexAttr>;
-%template(SpecializationConstantVec) std::vector<spirv_cross::SpecializationConstant>;
-%template(PlsRemapVec) std::vector<spirv_cross::PlsRemap>;
+%template(BufferRangeVec) spirv_cross::SmallVector<spirv_cross::BufferRange>;
+%template(CombinedImageSamplerVec) spirv_cross::SmallVector<spirv_cross::CombinedImageSampler>;
+%template(MSLResourceBindingVec) spirv_cross::SmallVector<spirv_cross::MSLResourceBinding>;
+%template(MSLVertexAttrVec) spirv_cross::SmallVector<spirv_cross::MSLVertexAttr>;
+%template(SpecializationConstantVec) spirv_cross::SmallVector<spirv_cross::SpecializationConstant>;
+%template(PlsRemapVec) spirv_cross::SmallVector<spirv_cross::PlsRemap>;
 

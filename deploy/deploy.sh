@@ -42,9 +42,10 @@ fi
 echo "Deploying version $VERSION with classifier $CLASSIFIER to Sonatype..."
 
 mvn -B $RELEASE_OPTS deploy --settings settings.xml
-mvn -B gpg:sign-and-deploy-file -DgroupId=graphics.scenery -Dversion=$VERSION \
--DartifactId=$ARTIFACT_ID \
--Dfile=target/$ARTIFACT_ID-$VERSION-$CLASSIFIER.jar \
--DrepositoryId=$REPOSITORY_ID \
--Durl=$REPOSITORY \
--Dclassifier=$CLASSIFIER -DgeneratePom=false $RELEASE_OPTS --settings settings.xml
+# The above command already deploys everything necessary, and Nexus is able to merge all together without issue
+# mvn -B $RELEASE_OPTS gpg:sign-and-deploy-file -DgroupId=graphics.scenery -Dversion=$VERSION \
+# -DartifactId=$ARTIFACT_ID \
+# -Dfile=target/$ARTIFACT_ID-$VERSION-$CLASSIFIER.jar \
+# -DrepositoryId=$REPOSITORY_ID \
+# -Durl=$REPOSITORY \
+# -Dclassifier=$CLASSIFIER -DgeneratePom=false $RELEASE_OPTS --settings settings.xml

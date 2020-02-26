@@ -193,20 +193,18 @@ public class Loader {
             }
         }
 
-        lp = System.getProperty("java.library.path");
-        System.setProperty("java.library.path", lp + File.pathSeparator + new java.io.File( "." ).getCanonicalPath() + File.separator + "target" + File.separator + "classes");
+        String libraryPath = new java.io.File( "." ).getCanonicalPath()
+                + File.separator + "target"
+                + File.separator + "classes"
+                + File.separator + libraryName;
 
-        try {
-            Field fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");
-            fieldSysPath.setAccessible(true);
-            fieldSysPath.set(null, null);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            System.err.println("Failed to set java.library.path: " + e.getMessage());
-            e.printStackTrace();
+        // we try local path first, in case we're running on the CI
+        if(!new File(libraryPath).exists()) {
+            libraryPath = tmpDir + File.separator + libraryName;
         }
 
         try {
-            System.loadLibrary("spirvcrossj");
+            System.load(libraryPath);
         } catch (UnsatisfiedLinkError e) {
             System.err.println("Unable to load native library: " + e.getMessage());
             String osname = System.getProperty("os.name");

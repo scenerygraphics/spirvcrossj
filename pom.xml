@@ -41,7 +41,7 @@
         <connection>scm:git:git://github.com/skalarproduktraum/spirvcrossj</connection>
         <developerConnection>scm:git:git@github.com:skalarproduktraum/spirvcrossj</developerConnection>
         <tag>HEAD</tag>
-        <url>http://scenery.graphics</url>
+        <url>https://github.com/scenerygraphics/spirvcrossj</url>
     </scm>
     <issueManagement>
         <system>GitHub</system>

@@ -103,6 +103,7 @@ public class Loader {
         System.err.println("Looking for library " + libraryName);
 
         if(System.getProperty("java.class.path").toLowerCase().contains("imagej-launcher") || !Boolean.parseBoolean(System.getProperty(projectName + ".useContextClassLoader", "true"))) {
+            logger.debug("Using context class loader");
             Enumeration<URL> res = Thread.currentThread().getContextClassLoader().getResources(libraryName);
             if(!res.hasMoreElements() && getPlatform() == Platform.MACOS) {
                 res = Thread.currentThread().getContextClassLoader().getResources(libraryNameMacOS.substring(0, libraryNameMacOS.indexOf(".")) + ".dylib");
@@ -145,6 +146,7 @@ public class Loader {
                 jars = jar.split(File.pathSeparator);
             }
         } else {
+            logger.debug("Not using context class loader");
             jars = System.getProperty("java.class.path").split(File.pathSeparator);
         }
 
@@ -154,6 +156,7 @@ public class Loader {
             }
 
             try {
+                logger.debug("Extracting libraries from " + s);
                 JarFile jar = new JarFile(s);
                 Enumeration<JarEntry> enumEntries = jar.entries();
 
@@ -196,7 +199,7 @@ public class Loader {
                 }
 
                 System.setProperty("java.library.path", lp + File.pathSeparator + tmpDir.getCanonicalPath());
-            } catch (IOException e) {
+            } catch (IOException /*| URISyntaxException*/ e) {
                 logger.error("Failed to extract native libraries: " + e.getMessage());
                 e.printStackTrace();
             }

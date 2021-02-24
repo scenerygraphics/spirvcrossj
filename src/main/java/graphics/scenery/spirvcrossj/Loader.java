@@ -1,7 +1,9 @@
 package graphics.scenery.spirvcrossj;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +17,11 @@ import java.util.jar.JarFile;
 public class Loader {
 
     static boolean nativesReady = false;
+    static final String projectName = "spirvcrossj";
+    static final String libraryNameWindows = "spirvcrossj.dll";
+    static final String libraryNameLinux = "libspirvcrossj.so";
+    static final String libraryNameMacOS = "libspirvcrossj.jnilib";
+    static final Logger logger = LoggerFactory.getLogger("Loader(" + projectName + ")");
 
     enum Platform { UNKNOWN, WINDOWS, LINUX, MACOS }
 
@@ -37,7 +44,7 @@ public class Loader {
             File[] files = new File(System.getProperty("java.io.tmpdir")).listFiles();
 
             for (File file : files) {
-                if (file.isDirectory() && file.getName().contains("spirvcrossj-natives-tmp")) {
+                if (file.isDirectory() && file.getName().contains(projectName + "-natives-tmp")) {
                     File lock = new File(file, ".lock");
 
                     // delete the temporary directory only if the lock does not exist
@@ -46,11 +53,12 @@ public class Loader {
                                 .map(Path::toFile)
                                 .sorted((f1, f2) -> -f1.compareTo(f2))
                                 .forEach(File::delete);
+                        logger.debug("Deleted leftover temp directory for " + projectName + " at " + file);
                     }
                 }
             }
         } catch(NullPointerException | IOException e) {
-            System.err.println("Unable to delete leftover temporary directories: " + e);
+            logger.error("Unable to delete leftover temporary directories: " + e);
             e.printStackTrace();
         }
     }
@@ -61,7 +69,7 @@ public class Loader {
         }
 
         String lp = System.getProperty("java.library.path");
-        File tmpDir = Files.createTempDirectory("spirvcrossj-natives-tmp").toFile();
+        File tmpDir = Files.createTempDirectory(projectName + "-natives-tmp").toFile();
 
         File lock = new File(tmpDir, ".lock");
         lock.createNewFile();
@@ -74,76 +82,74 @@ public class Loader {
 
         switch(getPlatform()) {
             case WINDOWS:
-                libraryName = "spirvcrossj.dll";
+                libraryName = libraryNameWindows;
                 classifier = "natives-windows";
                 break;
             case LINUX:
-                libraryName = "libspirvcrossj.so";
+                libraryName = libraryNameLinux;
                 classifier = "natives-linux";
                 break;
             case MACOS:
-                libraryName = "libspirvcrossj.jnilib";
+                libraryName = libraryNameMacOS;
                 classifier = "natives-macos";
                 break;
             default:
-                System.err.println("spirvcrossj is not supported on this platform.");
+                logger.error(projectName + " is not supported on this platform.");
                 classifier = "none";
                 libraryName = "none";
         }
 
         String[] jars;
+        System.err.println("Looking for library " + libraryName);
 
-        // FIXME: This incredibly ugly workaround here is needed due to the way ImageJ handles it's classpath
-        // Maybe there's a better way?
-        if(System.getProperty("java.class.path").toLowerCase().contains("imagej-launcher") || System.getProperty("spirvcrossj.useContextClassLoader") != null) {
+        if(System.getProperty("java.class.path").toLowerCase().contains("imagej-launcher") || !Boolean.parseBoolean(System.getProperty(projectName + ".useContextClassLoader", "true"))) {
             Enumeration<URL> res = Thread.currentThread().getContextClassLoader().getResources(libraryName);
             if(!res.hasMoreElements() && getPlatform() == Platform.MACOS) {
-                res = Thread.currentThread().getContextClassLoader().getResources("libspirvcrossj.dylib");
+                res = Thread.currentThread().getContextClassLoader().getResources(libraryNameMacOS.substring(0, libraryNameMacOS.indexOf(".")) + ".dylib");
             }
 
             if(!res.hasMoreElements()) {
-                System.err.println("ERROR: Could not find spirvcrossj libraries.");
-                return;
-            }
-
-            String jar = "";
-            while(res.hasMoreElements()) {
-                String p = res.nextElement().getPath();
-                if(p.contains("-natives-")) {
-                    jar = p;
-                    break;
-                }
-            }
-
-            if(jar.length() == 0) {
-                System.err.println("ERROR: Could not find spirvcrossj libraries.");
-                return;
-            }
-
-            // on Windows, file URLs are stated as file:///, on OSX and Linux only as file:/
-            int pathOffset = 5;
-
-            if(getPlatform() == Platform.WINDOWS) {
-                pathOffset = 6;
-            }
-
-            jar = jar.substring(jar.indexOf("file:/") + pathOffset);
-
-            if (jar.contains(classifier)) {
-                jar = jar.substring(0, jar.indexOf("!"));
+                logger.warn("Could not find " + projectName + " libraries using context class loader, falling back to manual method.");
+                jars = System.getProperty("java.class.path").split(File.pathSeparator);
             } else {
-                jar = jar.substring(0, jar.indexOf("!") - 4) + "-" + classifier + ".jar";
-            }
 
-            jars = jar.split(File.pathSeparator);
+                String jar = "";
+                while (res.hasMoreElements()) {
+                    String p = res.nextElement().getPath();
+                    if (p.contains("-natives-")) {
+                        jar = p;
+                        break;
+                    }
+                }
+
+                if (jar.length() == 0) {
+                    logger.error("Could not find " + projectName + " libraries, no matching JARs detected.");
+                    return;
+                }
+
+                // on Windows, file URLs are stated as file:///, on OSX and Linux only as file:/
+                int pathOffset = 5;
+
+                if (getPlatform() == Platform.WINDOWS) {
+                    pathOffset = 6;
+                }
+
+                jar = jar.substring(jar.indexOf("file:/") + pathOffset);
+
+                if (jar.contains(classifier)) {
+                    jar = jar.substring(0, jar.indexOf("!"));
+                } else {
+                    jar = jar.substring(0, jar.indexOf("!") - 4) + "-" + classifier + ".jar";
+                }
+
+                jars = jar.split(File.pathSeparator);
+            }
         } else {
             jars = System.getProperty("java.class.path").split(File.pathSeparator);
         }
 
-        for(int i = 0; i < jars.length; i ++) {
-            String s = jars[i];
-
-            if(!(s.contains("spirvcrossj") && s.contains("natives"))) {
+        for (String s : jars) {
+            if (!(s.contains(projectName) && s.contains("natives"))) {
                 continue;
             }
 
@@ -156,13 +162,16 @@ public class Loader {
 
                     // only extract library files
                     String extension = entry.getName().substring(entry.getName().lastIndexOf('.') + 1);
-                    if (!(extension.startsWith("so") || extension.startsWith("dll") || extension.startsWith("dylib") || extension.startsWith("jnilib"))) {
+                    if (!(extension.startsWith("so") || extension.startsWith("dll") || extension.startsWith("dylib") || extension.startsWith("jnilib")) && !entry.isDirectory()) {
+                        logger.debug("SKIPPED file " + entry.getName());
                         continue;
                     }
 
                     File f = new File(tmpDir.getAbsolutePath() + File.separator + entry.getName());
+                    logger.debug("Reading and extracting " + entry.getName() + " to " + f.toString());
 
                     if (entry.isDirectory()) {
+                        logger.debug("Creating new directory");
                         f.mkdir();
                         continue;
                     }
@@ -188,7 +197,7 @@ public class Loader {
 
                 System.setProperty("java.library.path", lp + File.pathSeparator + tmpDir.getCanonicalPath());
             } catch (IOException e) {
-                System.err.println("Failed to extract native libraries: " + e.getMessage());
+                logger.error("Failed to extract native libraries: " + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -206,13 +215,14 @@ public class Loader {
         try {
             System.load(libraryPath);
         } catch (UnsatisfiedLinkError e) {
-            System.err.println("Unable to load native library: " + e.getMessage());
+            logger.error("Unable to load native library: " + e.getMessage());
             String osname = System.getProperty("os.name");
             String osclass = osname.substring(0, osname.indexOf(' ')).toLowerCase();
 
-            System.err.println("Did you include spirvcrossj-natives-" + osclass + " in your dependencies?");
+            logger.error("Did you include " + projectName + "-natives-" + osclass + " in your dependencies?");
         }
 
+        logger.debug("Successfully loaded native library for " + projectName + " from " + libraryPath);
         nativesReady = true;
     }
 }

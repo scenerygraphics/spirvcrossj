@@ -28,9 +28,8 @@ addons:
     taps: AdoptOpenJDK/openjdk
     casks: adoptopenjdk8
     packages:
-      - gnupg2
       - adoptopenjdk8
-    update: true
+    update: false
 cache:
   directories:
   - $HOME/.m2

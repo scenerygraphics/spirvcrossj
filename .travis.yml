@@ -27,6 +27,7 @@ addons:
   homebrew:
     taps: AdoptOpenJDK/openjdk
     casks: adoptopenjdk8
+    # no need for gnupg2 here, already part of the default image
     packages:
       - adoptopenjdk8
     update: false

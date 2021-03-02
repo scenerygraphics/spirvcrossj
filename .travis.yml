@@ -30,6 +30,7 @@ addons:
     # no need for gnupg2 here, already part of the default image
     packages:
       - adoptopenjdk8
+      - swig
     update: false
 cache:
   directories:

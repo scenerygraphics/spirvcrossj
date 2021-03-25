@@ -100,9 +100,10 @@ public class Loader {
         }
 
         String[] jars;
-        System.err.println("Looking for library " + libraryName);
+        logger.debug("Looking for library " + libraryName);
 
-        if(System.getProperty("java.class.path").toLowerCase().contains("imagej-launcher") || !Boolean.parseBoolean(System.getProperty(projectName + ".useContextClassLoader", "true"))) {
+        if(System.getProperty("java.class.path").toLowerCase().contains("imagej-launcher")
+                || Boolean.parseBoolean(System.getProperty(projectName + ".useContextClassLoader", "true"))) {
             logger.debug("Using context class loader");
             Enumeration<URL> res = Thread.currentThread().getContextClassLoader().getResources(libraryName);
             if(!res.hasMoreElements() && getPlatform() == Platform.MACOS) {
@@ -219,10 +220,7 @@ public class Loader {
             System.load(libraryPath);
         } catch (UnsatisfiedLinkError e) {
             logger.error("Unable to load native library: " + e.getMessage());
-            String osname = System.getProperty("os.name");
-            String osclass = osname.substring(0, osname.indexOf(' ')).toLowerCase();
-
-            logger.error("Did you include " + projectName + "-natives-" + osclass + " in your dependencies?");
+            logger.error("Did you include " + projectName + "-" + classifier + " in your dependencies?");
         }
 
         logger.debug("Successfully loaded native library for " + projectName + " from " + libraryPath);

@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -102,6 +103,8 @@ public class Loader {
         String[] jars;
         logger.debug("Looking for library " + libraryName);
 
+        boolean localLibraryFound = false;
+
         if(System.getProperty("java.class.path").toLowerCase().contains("imagej-launcher")
                 || Boolean.parseBoolean(System.getProperty(projectName + ".useContextClassLoader", "true"))) {
             logger.debug("Using context class loader");
@@ -114,37 +117,47 @@ public class Loader {
                 logger.warn("Could not find " + projectName + " libraries using context class loader, falling back to manual method.");
                 jars = System.getProperty("java.class.path").split(File.pathSeparator);
             } else {
-
                 String jar = "";
                 while (res.hasMoreElements()) {
                     String p = res.nextElement().getPath();
+                    logger.debug("Found match at " + p);
                     if (p.contains("-natives-")) {
                         jar = p;
                         break;
                     }
+
+                    if (!p.contains(".jar") && p.endsWith(libraryName) && p.contains("target") && p.contains("classes")) {
+                        logger.debug("Found local library, probably running as CI build.");
+                        localLibraryFound = true;
+                        break;
+                    }
                 }
 
-                if (jar.length() == 0) {
+                if (jar.length() == 0 && !localLibraryFound) {
                     logger.error("Could not find " + projectName + " libraries, no matching JARs detected.");
                     return;
-                }
-
-                // on Windows, file URLs are stated as file:///, on OSX and Linux only as file:/
-                int pathOffset = 5;
-
-                if (getPlatform() == Platform.WINDOWS) {
-                    pathOffset = 6;
-                }
-
-                jar = jar.substring(jar.indexOf("file:/") + pathOffset);
-
-                if (jar.contains(classifier)) {
-                    jar = jar.substring(0, jar.indexOf("!"));
+                } else if (localLibraryFound) {
+                    logger.debug("Using local library.");
+                    jars = new String[]{};
                 } else {
-                    jar = jar.substring(0, jar.indexOf("!") - 4) + "-" + classifier + ".jar";
-                }
 
-                jars = jar.split(File.pathSeparator);
+                    // on Windows, file URLs are stated as file:///, on OSX and Linux only as file:/
+                    int pathOffset = 5;
+
+                    if (getPlatform() == Platform.WINDOWS) {
+                        pathOffset = 6;
+                    }
+
+                    jar = jar.substring(jar.indexOf("file:/") + pathOffset);
+
+                    if (jar.contains(classifier)) {
+                        jar = jar.substring(0, jar.indexOf("!"));
+                    } else {
+                        jar = jar.substring(0, jar.indexOf("!") - 4) + "-" + classifier + ".jar";
+                    }
+
+                    jars = jar.split(File.pathSeparator);
+                }
             }
         } else {
             logger.debug("Not using context class loader");
@@ -212,7 +225,8 @@ public class Loader {
                 + File.separator + libraryName;
 
         // we try local path first, in case we're running on the CI
-        if(!new File(libraryPath).exists()) {
+        if(!localLibraryFound && !new File(libraryPath).exists()) {
+            logger.debug("Not using local library.");
             libraryPath = tmpDir + File.separator + libraryName;
         }
 

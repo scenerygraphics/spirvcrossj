@@ -121,12 +121,12 @@ public class Loader {
                 while (res.hasMoreElements()) {
                     String p = res.nextElement().getPath();
                     logger.debug("Found match at " + p);
-                    if (p.contains("-natives-")) {
+                    if (p.contains(".jar!")) {
                         jar = p;
                         break;
                     }
 
-                    if (!p.contains(".jar") && p.endsWith(libraryName) && p.contains("target") && p.contains("classes")) {
+                    if (!p.contains(".jar!") && p.endsWith(libraryName) && p.contains("target") && p.contains("classes")) {
                         logger.debug("Found local library, probably running as CI build.");
                         localLibraryFound = true;
                         break;
@@ -166,7 +166,7 @@ public class Loader {
 
         for (String s : jars) {
             if (!(s.contains(projectName) && s.contains("natives"))) {
-                continue;
+                logger.debug("Detected JAR is not spirvcrossj native JAR, probably extracting from fat JAR.");
             }
 
             try {

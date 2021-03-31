@@ -140,7 +140,6 @@ public class Loader {
                     logger.debug("Using local library.");
                     jars = new String[]{};
                 } else {
-
                     // on Windows, file URLs are stated as file:///, on OSX and Linux only as file:/
                     int pathOffset = 5;
 
@@ -149,12 +148,6 @@ public class Loader {
                     }
 
                     jar = jar.substring(jar.indexOf("file:/") + pathOffset);
-
-                    if (jar.contains(classifier)) {
-                        jar = jar.substring(0, jar.indexOf("!"));
-                    } else {
-                        jar = jar.substring(0, jar.indexOf("!") - 4) + "-" + classifier + ".jar";
-                    }
 
                     jars = jar.split(File.pathSeparator);
                 }

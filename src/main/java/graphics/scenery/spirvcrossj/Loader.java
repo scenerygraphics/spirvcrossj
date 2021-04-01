@@ -149,6 +149,11 @@ public class Loader {
 
                     jar = jar.substring(jar.indexOf("file:/") + pathOffset);
 
+                    if(jar.contains(".jar!")) {
+                        jar = jar.substring(0, jar.indexOf("!"));
+                    }
+
+                    logger.debug("Using jar at " + jar);
                     jars = jar.split(File.pathSeparator);
                 }
             }

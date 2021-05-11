@@ -18,7 +18,7 @@ environment:
   OSSRH_USERNAME:
     secure: q9o/GpgNFG7egrDNdcrXcv6WkC/5EepBl4DUveVpVg8=
   OSSRH_PASSWORD:
-    secure: TuEw69O19kwhEg7g+WYO27gsVWImcnOZCmwkhy1uKsE=
+    secure: RVnldLhxX/P6OqNj4wEbrbbqOKpMhViTBpZ6lmjSruJAC6Lu7slGjt+XSluDPFrP
 
 artifacts:
   - path: 'target\**\*.jar'

@@ -57,7 +57,7 @@ Finally, add the following dependencies:
 <dependency>
     <groupId>graphics.scenery</groupId>
     <artifactId>spirvcrossj</artifactId>
-    <version>0.7.1-1.1.106.0</version>
+    <version>0.8.0-1.1.106.0</version>
 </dependency>
 
 <dependency>
@@ -85,7 +85,7 @@ Then, under `dependencies` section, exploiting the lwjgl native `switch`:
 ```groovy
     dependencies {
         ..
-        ext.spirvCrossVersion = "0.7.1-1.1.106"
+        ext.spirvCrossVersion = "0.8.0-1.1.106"
         compile "graphics.scenery:spirvcrossj:$spirvCrossVersion"
     
         switch (OperatingSystem.current()) {

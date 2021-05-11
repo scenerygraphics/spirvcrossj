@@ -7,10 +7,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 /**
  * Created by ulrik on 11/14/2016.
@@ -100,7 +97,7 @@ public class Loader {
                 libraryName = "none";
         }
 
-        String[] jars;
+        InputStream libraryStream = null;
         logger.debug("Looking for library " + libraryName);
 
         boolean localLibraryFound = false;
@@ -114,107 +111,60 @@ public class Loader {
             }
 
             if(!res.hasMoreElements()) {
-                logger.warn("Could not find " + projectName + " libraries using context class loader, falling back to manual method.");
-                jars = System.getProperty("java.class.path").split(File.pathSeparator);
+                throw new IllegalStateException("Could not find " + projectName + " libraries using context class loader.");
             } else {
-                String jar = "";
                 while (res.hasMoreElements()) {
-                    String p = res.nextElement().getPath();
+                    final URL resource = res.nextElement();
+                    String p = resource.getPath();
                     logger.debug("Found match at " + p);
+
+                    // result lives in a JAR
                     if (p.contains(".jar!")) {
-                        jar = p;
+                        libraryStream = resource.openStream();
                         break;
                     }
 
+                    // result lives in a build directory and not in a JAR, probably part of a CI build
                     if (!p.contains(".jar!") && p.endsWith(libraryName) && p.contains("target") && p.contains("classes")) {
                         logger.debug("Found local library, probably running as CI build.");
                         localLibraryFound = true;
+                        libraryStream = resource.openStream();
                         break;
                     }
                 }
-
-                if (jar.length() == 0 && !localLibraryFound) {
-                    logger.error("Could not find " + projectName + " libraries, no matching JARs detected.");
-                    return;
-                } else if (localLibraryFound) {
-                    logger.debug("Using local library.");
-                    jars = new String[]{};
-                } else {
-                    // on Windows, file URLs are stated as file:///, on OSX and Linux only as file:/
-                    int pathOffset = 5;
-
-                    if (getPlatform() == Platform.WINDOWS) {
-                        pathOffset = 6;
-                    }
-
-                    jar = jar.substring(jar.indexOf("file:/") + pathOffset);
-
-                    if(jar.contains(".jar!")) {
-                        jar = jar.substring(0, jar.indexOf("!"));
-                    }
-
-                    logger.debug("Using jar at " + jar);
-                    jars = jar.split(File.pathSeparator);
-                }
             }
         } else {
-            logger.debug("Not using context class loader");
-            jars = System.getProperty("java.class.path").split(File.pathSeparator);
+            throw new UnsupportedEncodingException("Extracting natives without using the context class loader is not supported anymore.");
         }
 
-        for (String s : jars) {
-            if (!(s.contains(projectName) && s.contains("natives"))) {
-                logger.debug("Detected JAR is not spirvcrossj native JAR, probably extracting from fat JAR.");
+        if(libraryStream == null) {
+            throw new IllegalStateException("Could not locate library " + libraryName);
+        }
+
+        try {
+            logger.debug("Extracting libraries from " + libraryStream);
+            File f = new File(tmpDir.getAbsolutePath() + File.separator + libraryName);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            FileOutputStream fos = new FileOutputStream(f);
+
+            byte[] buffer = new byte[1024];
+            int len;
+
+            while ((len = libraryStream.read(buffer)) > -1) {
+                baos.write(buffer, 0, len);
             }
 
-            try {
-                logger.debug("Extracting libraries from " + s);
-                JarFile jar = new JarFile(s);
-                Enumeration<JarEntry> enumEntries = jar.entries();
+            baos.flush();
+            fos.write(baos.toByteArray());
 
-                while (enumEntries.hasMoreElements()) {
-                    JarEntry entry = enumEntries.nextElement();
+            fos.close();
+            baos.close();
+            libraryStream.close();
 
-                    // only extract library files
-                    String extension = entry.getName().substring(entry.getName().lastIndexOf('.') + 1);
-                    if (!(extension.startsWith("so") || extension.startsWith("dll") || extension.startsWith("dylib") || extension.startsWith("jnilib")) && !entry.isDirectory()) {
-                        logger.debug("SKIPPED file " + entry.getName());
-                        continue;
-                    }
-
-                    File f = new File(tmpDir.getAbsolutePath() + File.separator + entry.getName());
-                    logger.debug("Reading and extracting " + entry.getName() + " to " + f.toString());
-
-                    if (entry.isDirectory()) {
-                        logger.debug("Creating new directory");
-                        f.mkdir();
-                        continue;
-                    }
-
-                    InputStream ins = jar.getInputStream(entry);
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    FileOutputStream fos = new FileOutputStream(f);
-
-                    byte[] buffer = new byte[1024];
-                    int len;
-
-                    while ((len = ins.read(buffer)) > -1) {
-                        baos.write(buffer, 0, len);
-                    }
-
-                    baos.flush();
-                    fos.write(baos.toByteArray());
-
-                    fos.close();
-                    baos.close();
-                    ins.close();
-                }
-
-                System.setProperty("java.library.path", lp + File.pathSeparator + tmpDir.getCanonicalPath());
-            } catch (IOException /*| URISyntaxException*/ e) {
-                logger.error("Failed to extract native libraries: " + e.getMessage());
-                e.printStackTrace();
-            }
+            System.setProperty("java.library.path", lp + File.pathSeparator + tmpDir.getCanonicalPath());
+        } catch (IOException /*| URISyntaxException*/ e) {
+            logger.error("Failed to extract native libraries: " + e.getMessage());
+            e.printStackTrace();
         }
 
         String libraryPath = new java.io.File( "." ).getCanonicalPath()

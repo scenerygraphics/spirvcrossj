@@ -32,11 +32,11 @@ if [[ "$VERSION" == *"SNAPSHOT"* ]]
 then
     echo "Configuring for SNAPSHOT deployment"
     REPOSITORY=$SNAPSHOT_REPOSITORY
-    RELEASE_OPTS="-P release,sign"
+    RELEASE_OPTS="-P release"
 else
     echo "Configuring for release deployment"
     REPOSITORY=$RELEASE_REPOSITORY
-    RELEASE_OPTS="-P release,sign"
+    RELEASE_OPTS="-P release"
 fi
 
 echo "Deploying version $VERSION with classifier $CLASSIFIER to Sonatype..."

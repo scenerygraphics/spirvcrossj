@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ "$TRAVIS" == 'true' ] && [ "$TRAVIS_BRANCH" == 'master' ] && [ "$TRAVIS_PULL_REQUEST" == 'false' ]; then
+if [ "$TRAVIS" == 'true' ] && [ "$TRAVIS_BRANCH" == 'master' ]; then
     echo "Starting Travis deploy..."
 elif [ "$APPVEYOR" == 'True' ] && [ "$APPVEYOR_REPO_BRANCH" == 'master' ] && [ "$APPVEYOR_PULL_REQUEST_TITLE" == '' ]; then
     echo "Starting Appveyor deploy..."

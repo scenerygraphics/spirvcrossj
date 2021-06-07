@@ -66,8 +66,15 @@ public class Loader {
             return;
         }
 
+        String manualPath = System.getProperty("spirvcrossj.LibraryPath");
         String lp = System.getProperty("java.library.path");
-        File tmpDir = Files.createTempDirectory(projectName + "-natives-tmp").toFile();
+
+        final File tmpDir;
+        if(manualPath == null) {
+            tmpDir = Files.createTempDirectory(projectName + "-natives-tmp").toFile();
+        } else {
+            tmpDir = new File(manualPath);
+        }
 
         File lock = new File(tmpDir, ".lock");
         lock.createNewFile();

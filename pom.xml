@@ -49,7 +49,7 @@
     </issueManagement>
     <ciManagement>
         <system>Travis</system>
-        <url>https://travis-ci.org/skalarproduktraum/spirvcrossj/</url>
+        <url>https://github.com/skalarproduktraum/spirvcrossj/actions</url>
     </ciManagement>
 
     <licenses>

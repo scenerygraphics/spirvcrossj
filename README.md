@@ -1,12 +1,11 @@
 
-# spirvcrossj â€” JVM bindings for SPIRV-cross and glslang
+# spirvcrossj -- JVM bindings for SPIRV-cross and glslang
 
-## íº§íº§ spirvcrossj is retired now, please use
+## ðŸš§ðŸš§ spirvcrossj is retired now, please use
 [lwjgl's](https://www.lwjgl.org) shaderc and
-SPIRVcross bindings íº§íº§
+SPIRVcross bindings ðŸš§ðŸš§
 
-
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/graphics.scenery/spirvcrossj/badge.svg)](https://maven-badges.herokuapp.com/maven-central/graphics.scenery/spirvcrossj) Â· [![Join the chat at https://gitter.im/scenerygraphics/SciView](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/scenerygraphics/SciView?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) Â· [![Linux/macOS Build Status](https://travis-ci.org/scenerygraphics/spirvcrossj.svg?branch=master)](https://travis-ci.org/scenerygraphics/spirvcrossj) Â· [![Windows Build status](https://ci.appveyor.com/api/projects/status/6m5efeddoaqvc9b3/branch/master?svg=true)](https://ci.appveyor.com/project/skalarproduktraum/spirvcrossj/branch/master)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/graphics.scenery/spirvcrossj/badge.svg)](https://maven-badges.herokuapp.com/maven-central/graphics.scenery/spirvcrossj) Ã‚Â· [![Join the chat at https://gitter.im/scenerygraphics/SciView](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/scenerygraphics/SciView?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) Ã‚Â· [![Linux/macOS Build Status](https://travis-ci.org/scenerygraphics/spirvcrossj.svg?branch=master)](https://travis-ci.org/scenerygraphics/spirvcrossj) Ã‚Â· [![Windows Build status](https://ci.appveyor.com/api/projects/status/6m5efeddoaqvc9b3/branch/master?svg=true)](https://ci.appveyor.com/project/skalarproduktraum/spirvcrossj/branch/master)
 
 [SPIRV-cross](https://github.com/KhronosGroup/SPIRV-cross) is a nifty library from the Khronos Group to enable GLSL shader reflection and conversion of SPIR-V binaries to different GLSL version. 
 
